@@ -1,10 +1,7 @@
 package ru.skypro.homework.controller;
 
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.Ads;
-import ru.skypro.homework.dto.Comment;
-import ru.skypro.homework.dto.CreateAds;
-import ru.skypro.homework.dto.ResponseWrapperAds;
+import ru.skypro.homework.dto.*;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
@@ -16,18 +13,18 @@ import java.util.Collection;
 public class AdsController {
 
     @GetMapping
-    public Collection<Ads> getAds(){
-        return new ArrayList<>();
+    public ResponseWrapperAds getAllAds(){
+        return new ResponseWrapperAds();
     }
 
     @PostMapping
-    public Ads addAds(@RequestBody Ads ads){
+    public Ads addAds(@RequestBody CreateAds createAds, @RequestParam(name="image") String[] image){
         return new Ads();
     }
 
     @GetMapping("/{ad_pk}/comments")
-    public Collection<Comment> getComments(@PathVariable Integer ad_pk){
-        return new ArrayList<>();
+    public ResponseWrapperComment getComments(@PathVariable Integer ad_pk){
+        return new ResponseWrapperComment();
     }
 
     @PostMapping("/{ad_pk}/comments")
@@ -36,8 +33,8 @@ public class AdsController {
     }
 
     @GetMapping("/{id}")
-    public Ads getFullAd(@PathVariable Integer id){
-        return new Ads();
+    public FullAds getFullAd(@PathVariable Integer id){
+        return new FullAds();
     }
 
     @DeleteMapping("/{id}")
@@ -46,8 +43,8 @@ public class AdsController {
     }
 
     @PatchMapping("/{id}")
-    public CreateAds updateAds(@PathVariable Integer id, @RequestBody CreateAds createAds){
-        return new CreateAds();
+    public Ads updateAds(@PathVariable Integer id, @RequestBody CreateAds createAds){
+        return new Ads();
     }
 
     @GetMapping("/{ad_pk}/comments/{id}")
