@@ -36,8 +36,8 @@ public class WebSecurityConfig {
         http
                 .csrf().disable()
                 .authorizeHttpRequests((authz) ->
-                        authz
-                                .mvcMatchers(AUTH_WHITELIST).permitAll()
+                                authz
+                                        .mvcMatchers(AUTH_WHITELIST).permitAll()
 //                                .mvcMatchers("/ads/**", "/users/**").authenticated()
 
                 )
