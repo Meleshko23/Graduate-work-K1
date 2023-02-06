@@ -2,15 +2,17 @@ package ru.skypro.homework.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class FullAds {
-    String authorFirstName;
-    String authorLastName;
-    String description;
-    String email;
-    String[] image;
-    String phone;
-    Integer pk;
-    Integer price;
-    String title;
+    private String authorFirstName;
+    private String authorLastName;
+    private String description;
+    private String email;
+    private List<String> image;
+    private String phone;
+    private Integer pk;
+    private Integer price;
+    private String title;
 }
