@@ -228,9 +228,9 @@ public class AdsController {
                                        @RequestParam(name = "credentials", required = false) Object credentials,
                                        @RequestParam(name = "details", required = false) Object details,
                                        @RequestParam(name = "principal", required = false) Object principal) {
-        if () {
+//        if () {
             return new ResponseWrapperAds();
-        }
+//        }
     }
 
 }

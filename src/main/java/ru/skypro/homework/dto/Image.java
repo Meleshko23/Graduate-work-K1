@@ -6,5 +6,5 @@ import java.util.List;
 
 @Data
 public class Image {
-    private List image;
+    private List<String> image;
 }

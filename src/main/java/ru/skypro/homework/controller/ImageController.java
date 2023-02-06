@@ -17,12 +17,12 @@ import ru.skypro.homework.dto.Image;
 public class ImageController {
 
     @Operation(
-            summary = "Получить изображение",
+            summary = "Обновить изображение",
             description = ""
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
-                    content = @Content(mediaType = "*/*",
+                    content = @Content(mediaType = "application/octet-stream", // или mediaType = "*/*"?
                             schema = @Schema(implementation = Image.class))),
 
             @ApiResponse(responseCode = "404", description = "Not Found")
