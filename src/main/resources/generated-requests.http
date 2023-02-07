@@ -5,7 +5,7 @@ Content-Type: application/json
 Authorization: Basic user password
 
 ###
-GET http://localhost:8080/ads/asddsfsdf/comment
+GET http://localhost:8080/ads/asddsfsdf/commentDTO
 Content-Type: application/json
 Authorization: Basic user password
 

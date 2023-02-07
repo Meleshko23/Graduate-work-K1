@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class Ads {
+public class AdsDTO {
     private Integer author;
     private List<String> image;
     private Integer pk;

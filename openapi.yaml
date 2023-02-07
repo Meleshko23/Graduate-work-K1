@@ -13,7 +13,7 @@ servers:
 tags:
 - description: Auth Controller
   name: Авторизация
-- description: Ads Controller
+- description: AdsDTO Controller
   name: Объявления
 - description: User Controller
   name: Пользователи
@@ -645,7 +645,7 @@ components:
           type: integer
         title:
           type: string
-      title: Ads
+      title: AdsDTO
       type: object
     AdsComment:
       example:
@@ -826,7 +826,7 @@ components:
           items:
             $ref: '#/components/schemas/Ads'
           type: array
-      title: ResponseWrapper«Ads»
+      title: ResponseWrapper«AdsDTO»
       type: object
     ResponseWrapper«User»:
       example:
