@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.Objects;
+import java.util.List;
 
 @Entity
 @Data
@@ -17,9 +18,9 @@ public class User {
     private String phone;
     private String regDate;
     private String city;
-    private String image;
+    private List<String> image;
 
-    public User(String email, String firstName, Integer id, String lastName, String phone, String regDate, String city, String image) {
+    public User(String email, String firstName, Integer id, String lastName, String phone, String regDate, String city, List<String> image) {
         this.email = email;
         this.firstName = firstName;
         this.id = id;
@@ -28,10 +29,6 @@ public class User {
         this.regDate = regDate;
         this.city = city;
         this.image = image;
-    }
-
-    public User() {
-
     }
 
     @Override
@@ -57,7 +54,7 @@ public class User {
                 ", phone='" + phone + '\'' +
                 ", regDate='" + regDate + '\'' +
                 ", city='" + city + '\'' +
-                ", image='" + image + '\'' +
+                ", image=" + image +
                 '}';
     }
 }

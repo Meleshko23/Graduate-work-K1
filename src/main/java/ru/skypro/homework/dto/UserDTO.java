@@ -2,6 +2,8 @@ package ru.skypro.homework.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class UserDTO {
     private String email;
@@ -11,5 +13,5 @@ public class UserDTO {
     private String phone;
     private String regDate;
     private String city;
-    private String image;
+    private List<String> image;
 }
