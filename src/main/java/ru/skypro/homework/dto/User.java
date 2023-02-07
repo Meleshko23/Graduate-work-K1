@@ -4,12 +4,12 @@ import lombok.Data;
 
 @Data
 public class User {
-    String email;
-    String firstName;
-    Integer id;
-    String lastName;
-    String phone;
-    String regDate;
-    String city;
-    String image;
+    private String email;
+    private String firstName;
+    private Integer id;
+    private String lastName;
+    private String phone;
+    private String regDate;
+    private String city;
+    private String image;
 }
