@@ -1,10 +1,17 @@
 package ru.skypro.homework.model;
 
+import lombok.Data;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.Objects;
 
+@Entity
+@Data
 public class Comment {
     private Integer author;
     private String createAt;
+    @Id
     private Integer pk;
     private String text;
 
@@ -15,36 +22,8 @@ public class Comment {
         this.text = text;
     }
 
-    public Integer getAuthor() {
-        return author;
-    }
+    public Comment() {
 
-    public void setAuthor(Integer author) {
-        this.author = author;
-    }
-
-    public String getCreateAt() {
-        return createAt;
-    }
-
-    public void setCreateAt(String createAt) {
-        this.createAt = createAt;
-    }
-
-    public Integer getPk() {
-        return pk;
-    }
-
-    public void setPk(Integer pk) {
-        this.pk = pk;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
     }
 
     @Override
