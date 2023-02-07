@@ -37,7 +37,7 @@ public class AdsController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Created",
                     content = @Content(mediaType = "*/*",
-                            schema = @Schema(implementation = AdsDTO.class))),
+                            schema = @Schema(implementation = AdsDto.class))),
 
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
 
@@ -47,9 +47,9 @@ public class AdsController {
     })
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public AdsDTO addAds(@RequestPart(name = "properties") CreateAds createAds,
+    public AdsDto addAds(@RequestPart(name = "properties") CreateAdsDto createAdsDto,
                          @RequestPart MultipartFile image) {
-        return new AdsDTO();
+        return new AdsDto();
     }
 
     @Operation(
@@ -76,7 +76,7 @@ public class AdsController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = "*/*",
-                            schema = @Schema(implementation = CommentDTO.class))),
+                            schema = @Schema(implementation = CommentDto.class))),
 
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
 
@@ -86,9 +86,9 @@ public class AdsController {
     })
 
     @PostMapping("/{ad_pk}/comments")
-    public CommentDTO addComments(@PathVariable(name = "ad_pk", required = true) Integer adPk,
-                                  @RequestBody(required = true) CommentDTO commentDTO) {
-        return new CommentDTO();
+    public CommentDto addComments(@PathVariable(name = "ad_pk", required = true) Integer adPk,
+                                  @RequestBody(required = true) CommentDto commentDTO) {
+        return new CommentDto();
     }
 
     @Operation(
@@ -98,14 +98,14 @@ public class AdsController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = "*/*",
-                            schema = @Schema(implementation = FullAds.class))),
+                            schema = @Schema(implementation = FullAdsDto.class))),
 
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
 
     @GetMapping("/{id}")
-    public FullAds getFullAd(@PathVariable(required = true) Integer id) {
-        return new FullAds();
+    public FullAdsDto getFullAd(@PathVariable(required = true) Integer id) {
+        return new FullAdsDto();
     }
 
     @Operation(
@@ -131,7 +131,7 @@ public class AdsController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = "*/*",
-                            schema = @Schema(implementation = AdsDTO.class))),
+                            schema = @Schema(implementation = AdsDto.class))),
 
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
 
@@ -141,9 +141,9 @@ public class AdsController {
     })
 
     @PatchMapping("/{id}")
-    public AdsDTO updateAds(@PathVariable(required = true) Integer id,
-                            @RequestBody CreateAds createAds) {
-        return new AdsDTO();
+    public AdsDto updateAds(@PathVariable(required = true) Integer id,
+                            @RequestBody CreateAdsDto createAdsDto) {
+        return new AdsDto();
     }
 
     @Operation(
@@ -153,15 +153,15 @@ public class AdsController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = "*/*",
-                            schema = @Schema(implementation = CommentDTO.class))),
+                            schema = @Schema(implementation = CommentDto.class))),
 
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
 
     @GetMapping("/{ad_pk}/comments/{id}")
-    public CommentDTO getComments(@PathVariable(name = "ad_pk", required = true) Integer adPk,
+    public CommentDto getComments(@PathVariable(name = "ad_pk", required = true) Integer adPk,
                                   @PathVariable(required = true) Integer id) {
-        return new CommentDTO();
+        return new CommentDto();
     }
 
     @Operation(
@@ -190,7 +190,7 @@ public class AdsController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = "*/*",
-                            schema = @Schema(implementation = CommentDTO.class))),
+                            schema = @Schema(implementation = CommentDto.class))),
 
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
 
@@ -200,10 +200,10 @@ public class AdsController {
     })
 
     @PatchMapping("/{ad_pk}/comments/{id}")
-    public CommentDTO updateComments(@PathVariable(name = "ad_pk", required = true) Integer adPk,
+    public CommentDto updateComments(@PathVariable(name = "ad_pk", required = true) Integer adPk,
                                      @PathVariable(required = true) Integer id,
-                                     @RequestBody CommentDTO commentDTO) {
-        return new CommentDTO();
+                                     @RequestBody CommentDto commentDTO) {
+        return new CommentDto();
     }
 
     @Operation(

@@ -5,10 +5,12 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class AdsDTO {
-    private Integer author;
+public class AdsDto {
+    private int author;
     private List<String> image;
-    private Integer pk;
-    private Integer price;
+    private int pk;
+    private int price;
     private String title;
 }
+
+

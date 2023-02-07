@@ -3,9 +3,9 @@ package ru.skypro.homework.dto;
 import lombok.Data;
 
 @Data
-public class CommentDTO {
-    private Integer author;
+public class CommentDto {
+    private int author;
     private String createAt;
-    private Integer pk;
+    private int pk;
     private String text;
 }
