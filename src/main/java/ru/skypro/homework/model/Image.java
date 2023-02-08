@@ -1,5 +1,6 @@
 package ru.skypro.homework.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -10,14 +11,18 @@ import javax.persistence.*;
 public class Image {
     @Id
     @GeneratedValue
-    private int id;
-
+    private Integer id;
     private String filePath;
-    private long fileSize;
+    private Long fileSize;
     private String mediaType;
     private byte[] data;
 
     @ManyToOne
     @JoinColumn(name = "ads_id")
+    @JsonIgnore
     private Ads ads;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
+    private User user;
 }
