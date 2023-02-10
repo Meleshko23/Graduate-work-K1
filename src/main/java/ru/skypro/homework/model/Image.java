@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Table(name = "images")
 public class Image {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String filePath;
     private Long fileSize;
@@ -23,7 +23,7 @@ public class Image {
     private Ads ads;
 
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "author")
     @JsonIgnore
     private User user;
 }

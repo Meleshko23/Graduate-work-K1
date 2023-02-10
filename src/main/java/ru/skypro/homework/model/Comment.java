@@ -12,8 +12,7 @@ import java.util.Objects;
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer pk;
-//    private Integer author;
+    private Integer id;
     private String createAt;
     private String text;
 
