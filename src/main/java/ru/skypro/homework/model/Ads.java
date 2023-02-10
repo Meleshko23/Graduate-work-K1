@@ -21,20 +21,20 @@ public class Ads {
     private String title;
 
     //в таблице сделать связь с user_id
-    private Integer author;
+//    private Integer author;
 
 //    @Column(name = "description")
 //    private String description;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "author")
     private User user;
 
     @OneToMany(mappedBy = "ads")
     private Collection<Image> images;
 
-    @OneToMany(mappedBy = "ads")
-    private Collection<Comment> comments;
+//    @OneToMany(mappedBy = "ads")
+//    private Collection<Comment> comments;
 
 
 }

@@ -21,6 +21,7 @@ public class Image {
     @JoinColumn(name = "ads_id")
     @JsonIgnore
     private Ads ads;
+
     @OneToOne
     @JoinColumn(name = "user_id")
     @JsonIgnore

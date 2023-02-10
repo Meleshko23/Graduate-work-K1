@@ -15,14 +15,21 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String email;
+    @Column(name = "first_name")
     private String firstName;
+    @Column(name = "last_name")
     private String lastName;
     private String phone;
+    @Column(name = "reg_date")
     private String regDate;
     private String city;
+    @Enumerated(value = EnumType.STRING)
     private Role role;
-    @OneToOne(mappedBy = "user")
-    @JsonIgnore
-    private Image avatar;
+
+    @OneToMany(mappedBy = "user")
+    private Collection<Ads> adsCollection;
+
+    @OneToMany(mappedBy = "user")
+    private Collection<Comment> commentsCollection;
 
 }
