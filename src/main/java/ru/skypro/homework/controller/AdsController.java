@@ -37,7 +37,7 @@ public class AdsController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Created",
                     content = @Content(mediaType = "*/*",
-                            schema = @Schema(implementation = Ads.class))),
+                            schema = @Schema(implementation = AdsDto.class))),
 
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
 
@@ -47,9 +47,9 @@ public class AdsController {
     })
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Ads addAds(@RequestPart(name = "properties") CreateAds createAds,
-                      @RequestPart MultipartFile image) {
-        return new Ads();
+    public AdsDto addAds(@RequestPart(name = "properties") CreateAdsDto createAdsDto,
+                         @RequestPart MultipartFile image) {
+        return new AdsDto();
     }
 
     @Operation(
@@ -76,7 +76,7 @@ public class AdsController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = "*/*",
-                            schema = @Schema(implementation = Comment.class))),
+                            schema = @Schema(implementation = CommentDto.class))),
 
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
 
@@ -86,9 +86,9 @@ public class AdsController {
     })
 
     @PostMapping("/{ad_pk}/comments")
-    public Comment addComments(@PathVariable(name = "ad_pk", required = true) Integer adPk,
-                               @RequestBody(required = true) Comment comment) {
-        return new Comment();
+    public CommentDto addComments(@PathVariable(name = "ad_pk", required = true) Integer adPk,
+                                  @RequestBody(required = true) CommentDto commentDTO) {
+        return new CommentDto();
     }
 
     @Operation(
@@ -98,14 +98,14 @@ public class AdsController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = "*/*",
-                            schema = @Schema(implementation = FullAds.class))),
+                            schema = @Schema(implementation = FullAdsDto.class))),
 
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
 
     @GetMapping("/{id}")
-    public FullAds getFullAd(@PathVariable(required = true) Integer id) {
-        return new FullAds();
+    public FullAdsDto getFullAd(@PathVariable(required = true) Integer id) {
+        return new FullAdsDto();
     }
 
     @Operation(
@@ -131,7 +131,7 @@ public class AdsController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = "*/*",
-                            schema = @Schema(implementation = Ads.class))),
+                            schema = @Schema(implementation = AdsDto.class))),
 
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
 
@@ -141,9 +141,9 @@ public class AdsController {
     })
 
     @PatchMapping("/{id}")
-    public Ads updateAds(@PathVariable(required = true) Integer id,
-                         @RequestBody CreateAds createAds) {
-        return new Ads();
+    public AdsDto updateAds(@PathVariable(required = true) Integer id,
+                            @RequestBody CreateAdsDto createAdsDto) {
+        return new AdsDto();
     }
 
     @Operation(
@@ -153,15 +153,15 @@ public class AdsController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = "*/*",
-                            schema = @Schema(implementation = Comment.class))),
+                            schema = @Schema(implementation = CommentDto.class))),
 
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
 
     @GetMapping("/{ad_pk}/comments/{id}")
-    public Comment getComments(@PathVariable(name = "ad_pk", required = true) Integer adPk,
-                               @PathVariable(required = true) Integer id) {
-        return new Comment();
+    public CommentDto getComments(@PathVariable(name = "ad_pk", required = true) Integer adPk,
+                                  @PathVariable(required = true) Integer id) {
+        return new CommentDto();
     }
 
     @Operation(
@@ -190,7 +190,7 @@ public class AdsController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = "*/*",
-                            schema = @Schema(implementation = Comment.class))),
+                            schema = @Schema(implementation = CommentDto.class))),
 
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
 
@@ -200,10 +200,10 @@ public class AdsController {
     })
 
     @PatchMapping("/{ad_pk}/comments/{id}")
-    public Comment updateComments(@PathVariable(name = "ad_pk", required = true) Integer adPk,
-                                  @PathVariable(required = true) Integer id,
-                                  @RequestBody Comment comment) {
-        return new Comment();
+    public CommentDto updateComments(@PathVariable(name = "ad_pk", required = true) Integer adPk,
+                                     @PathVariable(required = true) Integer id,
+                                     @RequestBody CommentDto commentDTO) {
+        return new CommentDto();
     }
 
     @Operation(
@@ -222,7 +222,6 @@ public class AdsController {
             @ApiResponse(responseCode = "404", description = "Not Found")})
 
     @GetMapping("/me")
-    //уточнить детали, для добавления параметров - так???
     public ResponseWrapperAds getAdsMe(@RequestParam(name = "authenticated", required = false) boolean authenticated,
                                        @RequestParam(name = "authorities[0].authority", required = false) String authority,
                                        @RequestParam(name = "credentials", required = false) Object credentials,

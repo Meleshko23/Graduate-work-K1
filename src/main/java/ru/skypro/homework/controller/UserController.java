@@ -9,7 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
-import ru.skypro.homework.dto.User;
+import ru.skypro.homework.dto.UserDto;
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -44,7 +44,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = "*/*",
-                            schema = @Schema(implementation = User.class))),
+                            schema = @Schema(implementation = UserDto.class))),
 
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
 
@@ -54,8 +54,8 @@ public class UserController {
     })
 
     @GetMapping("/me")
-    public User getUser(@RequestBody User user) {
-        return new User();
+    public UserDto getUser(@RequestBody UserDto userDTO) {
+        return new UserDto();
     }
 
     @Operation(
@@ -65,7 +65,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = "*/*",
-                            schema = @Schema(implementation = User.class))),
+                            schema = @Schema(implementation = UserDto.class))),
 
             @ApiResponse(responseCode = "204", description = "No Content"),
 
@@ -77,8 +77,8 @@ public class UserController {
     })
 
     @PatchMapping("/me")
-    public User updateUser(@RequestBody User user) {
-        return new User();
+    public UserDto updateUser(@RequestBody UserDto userDTO) {
+        return new UserDto();
     }
 
     @Operation(
@@ -92,8 +92,8 @@ public class UserController {
     })
 
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public User updateUserImage(@RequestPart MultipartFile image) {
-        return new User();
+    public UserDto updateUserImage(@RequestPart MultipartFile image) {
+        return new UserDto();
     }
 
 }
