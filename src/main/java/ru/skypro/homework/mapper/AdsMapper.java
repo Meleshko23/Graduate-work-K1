@@ -13,4 +13,5 @@ public interface AdsMapper {
     AdsDto adsToAdsDTO (Ads ads);
 
     Ads adsDTOToAds(AdsDto adsDto);
+
 }
