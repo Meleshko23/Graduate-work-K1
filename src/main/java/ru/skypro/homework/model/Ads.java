@@ -1,9 +1,11 @@
 package ru.skypro.homework.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Data
@@ -26,6 +28,13 @@ public class Ads {
 
     @OneToMany(mappedBy = "ads")
     private Collection<Image> images;
+
+    @Column(name = "description")
+    @JsonIgnore
+    private String description;
+
+    @OneToMany
+    private List<Comment> comments;
 
 
 }

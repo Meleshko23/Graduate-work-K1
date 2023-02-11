@@ -5,12 +5,12 @@ import org.mapstruct.factory.Mappers;
 import ru.skypro.homework.dto.ImageDto;
 import ru.skypro.homework.model.Image;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface ImageMapper {
 
     ImageMapper INSTANCE = Mappers.getMapper(ImageMapper.class);
 
-    ImageDto imageToImageDTO(Image image);
+    ImageDto imageToImageDto(Image image);
 
-    Image imageDTOToImage(ImageDto imageDto);
+    Image imageDtoToImage(ImageDto imageDto);
 }

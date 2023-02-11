@@ -5,12 +5,12 @@ import org.mapstruct.factory.Mappers;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.model.User;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface UserMapper {
 
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-    UserDto userToUserDTO(User user);
+    UserDto userToUserDto(User user);
 
-    User userDTOToUser(UserDto userDTO);
+    User userDtoToUser(UserDto userDTO);
 }

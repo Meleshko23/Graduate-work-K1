@@ -8,9 +8,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
+import ru.skypro.homework.service.AdsService;
+import ru.skypro.homework.service.CommentService;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -18,6 +21,8 @@ import ru.skypro.homework.dto.*;
 @RestController
 @RequestMapping("/ads")
 public class AdsController {
+    private final AdsService adsService;
+    private final CommentService commentService;
 
     @Operation(
             summary = "Получить все объявления",
@@ -31,7 +36,7 @@ public class AdsController {
 
     @GetMapping
     public ResponseWrapperAds getAllAds() {
-        return new ResponseWrapperAds();
+        return adsService.getAllAds();
     }
 
     @Operation(
@@ -52,8 +57,9 @@ public class AdsController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public AdsDto addAds(@RequestPart(name = "properties") CreateAdsDto createAdsDto,
-                         @RequestPart MultipartFile image) {
-        return new AdsDto();
+                         @RequestPart MultipartFile image,
+                         Authentication authentication) {
+        return adsService.createAds(createAdsDto, image, authentication);
     }
 
     @Operation(
@@ -70,7 +76,7 @@ public class AdsController {
 
     @GetMapping("/{ad_pk}/comments")
     public ResponseWrapperComment getComments(@PathVariable(name = "ad_pk", required = true) Integer adPk) {
-        return new ResponseWrapperComment();
+        return commentService.getAllCommentsForAdsWithId(adPk);
     }
 
     @Operation(
@@ -91,8 +97,8 @@ public class AdsController {
 
     @PostMapping("/{ad_pk}/comments")
     public CommentDto addComments(@PathVariable(name = "ad_pk", required = true) Integer adPk,
-                                  @RequestBody(required = true) CommentDto commentDTO) {
-        return new CommentDto();
+                                  @RequestBody(required = true) CommentDto commentDto) {
+        return commentService.createNewComment(adPk, commentDto);
     }
 
     @Operation(
@@ -109,7 +115,7 @@ public class AdsController {
 
     @GetMapping("/{id}")
     public FullAdsDto getFullAd(@PathVariable(required = true) Integer id) {
-        return new FullAdsDto();
+        return adsService.getFullAdsById(id);
     }
 
     @Operation(
@@ -125,7 +131,9 @@ public class AdsController {
     })
 
     @DeleteMapping("/{id}")
-    public void removeAds(@PathVariable(required = true) Integer id) {
+    public void removeAds(@PathVariable(required = true) Integer id,
+                          Authentication authentication) {
+        adsService.removeAds(id, authentication);
     }
 
     @Operation(
@@ -146,8 +154,9 @@ public class AdsController {
 
     @PatchMapping("/{id}")
     public AdsDto updateAds(@PathVariable(required = true) Integer id,
-                            @RequestBody CreateAdsDto createAdsDto) {
-        return new AdsDto();
+                            @RequestBody CreateAdsDto createAdsDto,
+                            Authentication authentication) {
+        return adsService.updateAdsById(id, createAdsDto, authentication);
     }
 
     @Operation(
@@ -165,7 +174,7 @@ public class AdsController {
     @GetMapping("/{ad_pk}/comments/{id}")
     public CommentDto getComments(@PathVariable(name = "ad_pk", required = true) Integer adPk,
                                   @PathVariable(required = true) Integer id) {
-        return new CommentDto();
+        return commentService.getComments(adPk, id);
     }
 
     @Operation(
@@ -184,7 +193,9 @@ public class AdsController {
 
     @DeleteMapping("/{ad_pk}/comments/{id}")
     public void deleteComments(@PathVariable(name = "ad_pk", required = true) Integer adPk,
-                               @PathVariable(required = true) Integer id) {
+                               @PathVariable(required = true) Integer id,
+                               Authentication authentication) {
+        commentService.deleteComments(adPk, id, authentication);
     }
 
     @Operation(
@@ -206,8 +217,9 @@ public class AdsController {
     @PatchMapping("/{ad_pk}/comments/{id}")
     public CommentDto updateComments(@PathVariable(name = "ad_pk", required = true) Integer adPk,
                                      @PathVariable(required = true) Integer id,
-                                     @RequestBody CommentDto commentDTO) {
-        return new CommentDto();
+                                     @RequestBody CommentDto commentDto,
+                                     Authentication authentication) {
+        return commentService.updateComments(adPk, id, commentDto, authentication);
     }
 
     @Operation(
@@ -226,14 +238,13 @@ public class AdsController {
             @ApiResponse(responseCode = "404", description = "Not Found")})
 
     @GetMapping("/me")
-    public ResponseWrapperAds getAdsMe(@RequestParam(name = "authenticated", required = false) boolean authenticated,
+    public ResponseWrapperAds getAdsMe(@RequestParam(name = "authenticated", required = false) boolean authenticated, // @RequestParam delete???
                                        @RequestParam(name = "authorities[0].authority", required = false) String authority,
                                        @RequestParam(name = "credentials", required = false) Object credentials,
                                        @RequestParam(name = "details", required = false) Object details,
-                                       @RequestParam(name = "principal", required = false) Object principal) {
-//        if () {
-        return new ResponseWrapperAds();
-//        }
+                                       @RequestParam(name = "principal", required = false) Object principal,
+                                       Authentication authentication) {
+        return adsService.getAllAdsForUser(authentication.getName());
     }
 
 }

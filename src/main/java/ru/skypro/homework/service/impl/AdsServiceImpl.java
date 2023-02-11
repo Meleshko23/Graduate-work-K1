@@ -5,17 +5,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.AdsDto;
-import ru.skypro.homework.dto.CreateAdsDto;
-import ru.skypro.homework.dto.FullAdsDto;
-import ru.skypro.homework.dto.ResponseWrapperAds;
+import ru.skypro.homework.dto.*;
 import ru.skypro.homework.mapper.AdsMapper;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.model.Ads;
+import ru.skypro.homework.model.Image;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
+
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -28,52 +28,66 @@ public class AdsServiceImpl implements AdsService {
     private final ImageService imageService;
     private final UserService userService;
 
-//    public AdsServiceImpl(AdsRepository adsRepository, AdsMapper adsMapper, UserMapper userMapper, ImageService imageService, UserService userService) {
-//        this.adsRepository = adsRepository;
-//        this.adsMapper = adsMapper;
-//        this.userMapper = userMapper;
-//        this.imageService = imageService;
-//        this.userService = userService;
-//    }
-
-//    @Override
-//    public ResponseWrapperAds getAllAds() {
-//        List<Ads> adsList = adsRepository.findAll();
-//        return adsMapper.adsToAdsDTO(getAdsById(Integer id));
-//    }
-
     @Override
     public ResponseWrapperAds getAllAds() {
-        return null;
-    }
-
-    @Override
-    public Ads getAdsById(Integer id) {
-        return null;
+        List<Ads> allAds = adsRepository.findAll();
+        return (ResponseWrapperAds) adsMapper.INSTANCE.ListAdsToListAdsDto(allAds);
     }
 
     @Override
     public AdsDto createAds(CreateAdsDto createAdsDto, MultipartFile image, Authentication authentication) {
-        return null;
+        UserDto userDto = userService.getUserByEmail(authentication.getName());
+        Ads ads = adsMapper.INSTANCE.createAdsDtoToAds(createAdsDto);
+        ads.setUser(userMapper.INSTANCE.userDtoToUser(userDto));
+        Ads savedAds = adsRepository.save(ads);
+
+        Image adsImage = imageService.createImage(image, savedAds);
+        savedAds.setImages(List.of(adsImage));
+        return adsMapper.INSTANCE.adsToAdsDto(savedAds);
+    }
+
+    @Override
+    public Ads getAdsById(Integer id) {
+        return adsRepository.findById(id).orElseThrow(RuntimeException::new); // обработать исключение!
     }
 
     @Override
     public FullAdsDto getFullAdsById(Integer id) {
-        return null;
+        Ads ads = getAdsById(id);
+        return adsMapper.INSTANCE.adsToFullAdsDto(ads);
     }
 
     @Override
     public void removeAds(Integer id, Authentication authentication) {
+        Ads ads = getAdsById(id);
 
+//        checkIfUserCanAlterAds(authentication, ads); // доработать метод проверки
+        adsRepository.delete(ads);
     }
 
     @Override
     public AdsDto updateAdsById(Integer id, CreateAdsDto createAdsDto, Authentication authentication) {
-        return null;
+        Ads oldAds = getAdsById(id);
+
+//        checkIfUserCanAlterAds(authentication, oldAds); // доработать метод проверки
+        Ads infoToUpdate = adsMapper.INSTANCE.createAdsDtoToAds(createAdsDto);
+
+        oldAds.setPrice(infoToUpdate.getPrice());
+        oldAds.setTitle(infoToUpdate.getTitle());
+        oldAds.setDescription(infoToUpdate.getDescription());
+
+        Ads updatedAds = adsRepository.save(oldAds);
+        return adsMapper.INSTANCE.adsToAdsDto(updatedAds);
     }
 
     @Override
     public ResponseWrapperAds getAllAdsForUser(String username) {
-        return null;
+        List<Ads> userAdsList = adsRepository.findAdsByAuthorEmail(username);
+        return adsMapper.INSTANCE.adsListToResponseWrapperAds(userAdsList.size(), userAdsList);
+
     }
+
 }
+
+
+
