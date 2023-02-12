@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -16,13 +15,18 @@ import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.CommentService;
 
 @Slf4j
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
 public class AdsController {
     private final AdsService adsService;
     private final CommentService commentService;
+
+    public AdsController(AdsService adsService, CommentService commentService) {
+        this.adsService = adsService;
+        this.commentService = commentService;
+    }
 
     @Operation(
             summary = "Получить все объявления",

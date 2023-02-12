@@ -8,17 +8,21 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.service.UserService;
 
 @Slf4j
-@RequiredArgsConstructor
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
+
+    private final UserService userService;
 
     @Operation(
             summary = "Установить пароль",
@@ -58,8 +62,9 @@ public class UserController {
     })
 
     @GetMapping("/me")
-    public UserDto getUser(@RequestBody UserDto userDTO) {
-        return new UserDto();
+    public UserDto getUser(@RequestBody UserDto userDto,
+                           Authentication authentication) {
+        return userService.getUserByEmail(authentication.getName());
     }
 
     @Operation(
@@ -81,8 +86,9 @@ public class UserController {
     })
 
     @PatchMapping("/me")
-    public UserDto updateUser(@RequestBody UserDto userDTO) {
-        return new UserDto();
+    public UserDto updateUser(@RequestBody UserDto userDto,
+                              Authentication authentication) {
+        return userService.updateUser(userDto, authentication.getName());
     }
 
     @Operation(
