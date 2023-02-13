@@ -10,6 +10,6 @@ import java.util.List;
 public interface AdsRepository extends JpaRepository<Ads, Integer> {
     List<Ads> findAllAdsByUserId(int id);
 
-    List<Ads> findAdsByAuthorEmail(String username);
+    List<Ads>findAdsByUser(String username);
 }
 

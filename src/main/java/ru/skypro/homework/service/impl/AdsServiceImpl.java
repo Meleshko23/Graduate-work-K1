@@ -82,7 +82,7 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public ResponseWrapperAds getAllAdsForUser(String username) {
-        List<Ads> userAdsList = adsRepository.findAdsByAuthorEmail(username);
+        List<Ads> userAdsList = adsRepository.findAdsByUser(username);
         return adsMapper.INSTANCE.adsListToResponseWrapperAds(userAdsList.size(), userAdsList);
 
     }
