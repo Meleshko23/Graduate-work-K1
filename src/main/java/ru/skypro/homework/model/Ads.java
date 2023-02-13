@@ -33,7 +33,7 @@ public class Ads {
     @JsonIgnore
     private String description;
 
-    @OneToMany
+    @OneToMany(mappedBy = "ads")
     private List<Comment> comments;
 
 

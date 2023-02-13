@@ -14,17 +14,19 @@ create table users
 );
 create table ads
 (
-    id     Serial primary key,
-    price  integer not null,
-    title  varchar not null,
-    author int REFERENCES users (id)
+    id          Serial primary key,
+    price       integer not null,
+    title       varchar not null,
+    description varchar not null,
+    author      int REFERENCES users (id)
 );
 create table comments
 (
     id        Serial primary key,
     create_at varchar not null,
     text      varchar not null,
-    author    int REFERENCES users (id)
+    author    int REFERENCES users (id),
+    ads_id    int REFERENCES ads (id)
 );
 create table images
 (
