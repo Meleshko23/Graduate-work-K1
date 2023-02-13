@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -13,20 +14,23 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.CommentService;
+import ru.skypro.homework.service.ImageService;
 
 @Slf4j
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
 public class AdsController {
+
     private final AdsService adsService;
     private final CommentService commentService;
+    private final ImageService imageService;
 
-    public AdsController(AdsService adsService, CommentService commentService) {
-        this.adsService = adsService;
-        this.commentService = commentService;
-    }
+//    public AdsController(AdsService adsService, CommentService commentService) {
+//        this.adsService = adsService;
+//        this.commentService = commentService;
+//    }
 
     @Operation(
             summary = "Получить все объявления",
@@ -242,11 +246,11 @@ public class AdsController {
             @ApiResponse(responseCode = "404", description = "Not Found")})
 
     @GetMapping("/me")
-    public ResponseWrapperAds getAdsMe(@RequestParam(name = "authenticated", required = false) boolean authenticated, // @RequestParam delete???
-                                       @RequestParam(name = "authorities[0].authority", required = false) String authority,
-                                       @RequestParam(name = "credentials", required = false) Object credentials,
-                                       @RequestParam(name = "details", required = false) Object details,
-                                       @RequestParam(name = "principal", required = false) Object principal,
+    public ResponseWrapperAds getAdsMe(//@RequestParam(name = "authenticated", required = false) boolean authenticated, // @RequestParam delete???
+                                       //@RequestParam(name = "authorities[0].authority", required = false) String authority,
+                                       //@RequestParam(name = "credentials", required = false) Object credentials,
+                                       //@RequestParam(name = "details", required = false) Object details,
+                                       //@RequestParam(name = "principal", required = false) Object principal,
                                        Authentication authentication) {
         return adsService.getAllAdsForUser(authentication.getName());
     }

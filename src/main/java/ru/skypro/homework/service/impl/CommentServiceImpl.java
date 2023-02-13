@@ -46,13 +46,13 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDto getComments(Integer adPk, Integer id) {
-        Comment comment = getCommentByIdAndAuthorId(adPk, id);
+        Comment comment = getCommentById(id);
         return commentMapper.INSTANCE.commentToCommentDto(comment);
     }
 
     @Override
     public void deleteComments(Integer adPk, Integer id, Authentication authentication) {
-        Comment comment = getCommentByIdAndAuthorId(adPk, id);
+        Comment comment = getCommentById(id);
 
 //        checkIfUserCanAlterComment(authentication, comment); // доработать метод проверки
         commentRepository.delete(comment);
@@ -60,7 +60,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDto updateComments(Integer adPk, Integer id, CommentDto commentDto, Authentication authentication) {
-        Comment comment = getCommentByIdAndAuthorId(adPk, id);
+        Comment comment = getCommentById(id);
 
 //        checkIfUserCanAlterComment(authentication, comment); // доработать метод проверки
         comment.setText(commentDto.getText());
@@ -69,8 +69,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment getCommentByIdAndAuthorId(Integer adPk, Integer id) {
-        return commentRepository.findCommentByIdAndAuthorId(adPk, id)
+    public Comment getCommentById(Integer id) {
+        return commentRepository.findById(Long.valueOf(id))
                 .orElseThrow(RuntimeException::new); // обработать исключение!
     }
 }

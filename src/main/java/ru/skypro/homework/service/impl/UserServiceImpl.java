@@ -12,7 +12,7 @@ import ru.skypro.homework.service.UserService;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public abstract class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
