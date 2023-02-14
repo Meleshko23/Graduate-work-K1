@@ -62,8 +62,7 @@ public class UserController {
     })
 
     @GetMapping("/me")
-    public UserDto getUser(@RequestBody UserDto userDto,
-                           Authentication authentication) {
+    public UserDto getUser(Authentication authentication) {
         return userService.getUserByEmail(authentication.getName());
     }
 
