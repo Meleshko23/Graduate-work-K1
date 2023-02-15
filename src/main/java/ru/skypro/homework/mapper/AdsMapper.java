@@ -34,8 +34,8 @@ public interface AdsMapper {
     @Mapping(source = "id", target = "pk")
     FullAdsDto adsToFullAdsDto(Ads ads);
 
-    //    @Mapping(source = "size", target = "count")
-//    @Mapping(source = "adsList", target = "results")
+    @Mapping(source = "size", target = "count")
+    @Mapping(source = "userAdsList", target = "results")
     ResponseWrapperAds adsListToResponseWrapperAds(int size, List<Ads> userAdsList);
 
     default String mapImageToString(Image image) {

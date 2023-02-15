@@ -22,16 +22,16 @@ public class Ads {
     @Column(name = "title")
     private String title;
 
+    @Column(name = "description")
+    @JsonIgnore
+    private String description;
+
     @ManyToOne
     @JoinColumn(name = "author")
     private User user;
 
     @OneToMany(mappedBy = "ads")
-    private Collection<Image> images;
-
-    @Column(name = "description")
-    @JsonIgnore
-    private String description;
+    private List<Image> images;
 
     @OneToMany(mappedBy = "ads")
     private List<Comment> comments;

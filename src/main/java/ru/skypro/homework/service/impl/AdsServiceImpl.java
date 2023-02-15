@@ -31,17 +31,18 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public ResponseWrapperAds getAllAds() {
         List<Ads> allAds = adsRepository.findAll();
-        return (ResponseWrapperAds) adsMapper.INSTANCE.ListAdsToListAdsDto(allAds);
+        return adsMapper.INSTANCE.adsListToResponseWrapperAds(allAds.size(), allAds);
     }
 
     @Override
     public AdsDto createAds(CreateAdsDto createAdsDto, MultipartFile image, Authentication authentication) {
         UserDto userDto = userService.getUserByEmail(authentication.getName());
+
         Ads ads = adsMapper.INSTANCE.createAdsDtoToAds(createAdsDto);
         ads.setUser(userMapper.INSTANCE.userDtoToUser(userDto));
         Ads savedAds = adsRepository.save(ads);
 
-        Image adsImage = imageService.createImage(image, savedAds);
+        Image adsImage = imageService.createImage(image, savedAds); // а если неск фото
         savedAds.setImages(List.of(adsImage));
         return adsMapper.INSTANCE.adsToAdsDto(savedAds);
     }

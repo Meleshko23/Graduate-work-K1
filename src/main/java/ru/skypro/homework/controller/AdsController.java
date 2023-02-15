@@ -27,11 +27,6 @@ public class AdsController {
     private final CommentService commentService;
     private final ImageService imageService;
 
-//    public AdsController(AdsService adsService, CommentService commentService) {
-//        this.adsService = adsService;
-//        this.commentService = commentService;
-//    }
-
     @Operation(
             summary = "Получить все объявления",
             description = ""
