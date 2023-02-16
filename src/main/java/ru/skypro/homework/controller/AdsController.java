@@ -59,7 +59,7 @@ public class AdsController {
     })
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public AdsDto addAds(@RequestPart(name = "properties") CreateAdsDto createAdsDto,
+    public AdsDto addAds(@RequestBody( required = true) CreateAdsDto createAdsDto,
                          @RequestPart MultipartFile image,
                          Authentication authentication) {
         return adsService.createAds(createAdsDto, image, authentication);

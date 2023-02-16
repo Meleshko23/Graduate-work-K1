@@ -22,7 +22,7 @@ public interface CommentMapper {
     @Mapping(source = "author", target = "user.id")
     Comment commentDtoToComment(CommentDto commentDto);
 
-    //    @Mapping(source = "size", target = "count")
-//    @Mapping(source = "commentList", target = "results")
+    @Mapping(source = "size", target = "count")
+    @Mapping(source = "comments", target = "results")
     ResponseWrapperComment commentsListToResponseWrapperComment(int size, List<Comment> comments);
 }

@@ -32,6 +32,10 @@ public interface AdsMapper {
     Ads createAdsDtoToAds(CreateAdsDto createAdsDto);
 
     @Mapping(source = "id", target = "pk")
+    @Mapping(source = "user.firstName", target = "authorFirstName")
+    @Mapping(source = "user.lastName", target = "authorLastName")
+    @Mapping(source = "user.email", target = "email")
+    @Mapping(source = "user.phone", target = "phone")
     FullAdsDto adsToFullAdsDto(Ads ads);
 
     @Mapping(source = "size", target = "count")
