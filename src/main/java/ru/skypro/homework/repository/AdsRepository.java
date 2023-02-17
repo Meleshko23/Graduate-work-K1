@@ -1,6 +1,7 @@
 package ru.skypro.homework.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ru.skypro.homework.model.Ads;
 
@@ -11,6 +12,9 @@ public interface AdsRepository extends JpaRepository<Ads, Integer> {
 
     List<Ads> findAllAdsByUserId(int id);
 
-    List<Ads>findAdsByUser(String username);
+    List<Ads>findAdsByUserEmail(String username);
+
+    @Query(value = "SELECT * FROM ads WHERE title LIKE '%in%'", nativeQuery = true)
+    List<Ads> findAdsByTitleContainingIgnoreCase(String title);
 }
 

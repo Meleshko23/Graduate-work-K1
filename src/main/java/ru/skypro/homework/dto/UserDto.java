@@ -2,6 +2,7 @@ package ru.skypro.homework.dto;
 
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -11,7 +12,7 @@ public class UserDto {
     private int id;
     private String lastName;
     private String phone;
-    private String regDate;
+    private LocalDate regDate;
     private String city;
     private List<String> image;
 }

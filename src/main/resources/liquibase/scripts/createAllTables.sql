@@ -8,8 +8,8 @@ create table users
     first_name varchar not null,
     last_name  varchar not null,
     phone      varchar not null,
-    reg_date   varchar not null,
-    city       varchar not null,
+    reg_date   date not null,
+    city       varchar,
     role       varchar not null
 );
 create table ads

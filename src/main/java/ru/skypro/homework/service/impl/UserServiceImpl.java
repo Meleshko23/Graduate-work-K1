@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto updateUser(UserDto userDto, String username) {
-        User user = userRepository.findUserByEmail(username).orElseThrow(RuntimeException::new); // обработать исключение!
+        User user = userRepository.findUserByEmail(username); // обработать исключение!
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setPhone(userDto.getPhone());
@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUserByEmail(String email) {
-        User user = userRepository.findUserByEmail(email).orElseThrow(RuntimeException::new); // обработать исключение!
+        User user = userRepository.findUserByEmail(email); // обработать исключение!
         return userMapper.userToUserDto(user);
     }
 
