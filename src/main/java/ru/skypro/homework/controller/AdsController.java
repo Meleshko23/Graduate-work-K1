@@ -38,8 +38,8 @@ public class AdsController {
     })
 
     @GetMapping
-    public ResponseWrapperAds getAllAds() {
-        return adsService.getAllAds();
+    public ResponseWrapperAds getAllAds(String title) {
+        return adsService.getAllAds(title);
     }
 
     @Operation(

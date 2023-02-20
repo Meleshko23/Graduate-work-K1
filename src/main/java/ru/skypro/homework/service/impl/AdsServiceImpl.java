@@ -29,8 +29,8 @@ public class AdsServiceImpl implements AdsService {
     private final UserService userService;
 
     @Override
-    public ResponseWrapperAds getAllAds() {
-        List<Ads> allAds = adsRepository.findAll();
+    public ResponseWrapperAds getAllAds(String title) {
+        List<Ads> allAds = adsRepository.findAdsByTitleContainingIgnoreCase(title);
         return adsMapper.INSTANCE.adsListToResponseWrapperAds(allAds.size(), allAds);
     }
 

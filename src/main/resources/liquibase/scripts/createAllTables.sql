@@ -23,7 +23,7 @@ create table ads
 create table comments
 (
     id        Serial primary key,
-    create_at varchar not null,
+    create_at date    not null,
     text      varchar not null,
     author    int REFERENCES users (id),
     ads_id    int REFERENCES ads (id)
