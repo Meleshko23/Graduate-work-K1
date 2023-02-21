@@ -8,7 +8,7 @@ create table users
     first_name varchar not null,
     last_name  varchar not null,
     phone      varchar not null,
-    reg_date   date not null,
+    reg_date   varchar not null,
     city       varchar,
     role       varchar not null
 );
@@ -18,15 +18,15 @@ create table ads
     price       integer not null,
     title       varchar not null,
     description varchar not null,
-    author      int REFERENCES users (id)
+    author      int REFERENCES users (id) on delete cascade
 );
 create table comments
 (
     id        Serial primary key,
     create_at date    not null,
     text      varchar not null,
-    author    int REFERENCES users (id),
-    ads_id    int REFERENCES ads (id)
+    author    int REFERENCES users (id) on delete cascade,
+    ads_id    int REFERENCES ads (id) on delete cascade
 );
 create table images
 (
@@ -35,6 +35,6 @@ create table images
     file_size  BIGINT  not null,
     media_type varchar not null,
     data       bytea,
-    ads_id     int REFERENCES ads (id),
-    author     int REFERENCES users (id)
+    ads_id     int REFERENCES ads (id) on delete cascade,
+    author     int REFERENCES users (id) on delete cascade
 );
