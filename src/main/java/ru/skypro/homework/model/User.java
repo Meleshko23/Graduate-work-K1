@@ -1,10 +1,10 @@
 package ru.skypro.homework.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Collection;
 
 @Entity
@@ -21,7 +21,7 @@ public class User {
     private String lastName;
     private String phone;
     @Column(name = "reg_date")
-    private String regDate;
+    private LocalDate regDate;
     private String city;
     @Enumerated(value = EnumType.STRING)
     private Role role;
