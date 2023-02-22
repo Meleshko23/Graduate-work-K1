@@ -8,10 +8,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
+import ru.skypro.homework.exception.AdsNotFoundException;
+import ru.skypro.homework.exception.CommentNotFoundException;
+import ru.skypro.homework.exception.CommentsNotFoundException;
 import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.CommentService;
 import ru.skypro.homework.service.ImageService;
@@ -59,7 +63,7 @@ public class AdsController {
     })
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public AdsDto addAds(@RequestBody( required = true) CreateAdsDto createAdsDto,
+    public AdsDto addAds(@RequestPart CreateAdsDto createAdsDto,
                          @RequestPart MultipartFile image,
                          Authentication authentication) {
         return adsService.createAds(createAdsDto, image, authentication);
@@ -78,8 +82,14 @@ public class AdsController {
     })
 
     @GetMapping("/{ad_pk}/comments")
-    public ResponseWrapperComment getComments(@PathVariable(name = "ad_pk", required = true) Integer adPk) {
-        return commentService.getAllCommentsForAdsWithId(adPk);
+    public ResponseEntity<ResponseWrapperComment> getComments(@PathVariable(name = "ad_pk", required = true) Integer adPk) {
+        ResponseWrapperComment result = null;
+        try {
+            result = commentService.getAllCommentsForAdsWithId(adPk);
+        } catch (AdsNotFoundException | CommentsNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(result);
     }
 
     @Operation(
@@ -99,9 +109,15 @@ public class AdsController {
     })
 
     @PostMapping("/{ad_pk}/comments")
-    public CommentDto addComments(@PathVariable(name = "ad_pk", required = true) Integer adPk,
+    public ResponseEntity<CommentDto> addComments(@PathVariable(name = "ad_pk", required = true) Integer adPk,
                                   @RequestBody(required = true) CommentDto commentDto) {
-        return commentService.createNewComment(adPk, commentDto);
+        CommentDto result = null;
+        try {
+            result = commentService.createNewComment(adPk, commentDto);
+        } catch (AdsNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(result);
     }
 
     @Operation(
@@ -117,8 +133,14 @@ public class AdsController {
     })
 
     @GetMapping("/{id}")
-    public FullAdsDto getFullAd(@PathVariable(required = true) Integer id) {
-        return adsService.getFullAdsById(id);
+    public ResponseEntity<FullAdsDto> getFullAd(@PathVariable(required = true) Integer id) {
+        FullAdsDto result = null;
+        try {
+            result = adsService.getFullAdsById(id);
+        } catch (AdsNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(result);
     }
 
     @Operation(
@@ -156,10 +178,16 @@ public class AdsController {
     })
 
     @PatchMapping("/{id}")
-    public AdsDto updateAds(@PathVariable(required = true) Integer id,
+    public ResponseEntity<AdsDto> updateAds(@PathVariable(required = true) Integer id,
                             @RequestBody CreateAdsDto createAdsDto,
                             Authentication authentication) {
-        return adsService.updateAdsById(id, createAdsDto, authentication);
+        AdsDto result = null;
+        try {
+            result = adsService.updateAdsById(id, createAdsDto, authentication);
+        } catch (AdsNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(result);
     }
 
     @Operation(
@@ -175,9 +203,15 @@ public class AdsController {
     })
 
     @GetMapping("/{ad_pk}/comments/{id}")
-    public CommentDto getComments(@PathVariable(name = "ad_pk", required = true) Integer adPk,
+    public ResponseEntity<CommentDto> getComment(@PathVariable(name = "ad_pk", required = true) Integer adPk,
                                   @PathVariable(required = true) Integer id) {
-        return commentService.getComments(adPk, id);
+        CommentDto result = null;
+        try {
+            result = commentService.getComment(adPk, id);
+        } catch (CommentNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(result);
     }
 
     @Operation(
@@ -195,10 +229,14 @@ public class AdsController {
     })
 
     @DeleteMapping("/{ad_pk}/comments/{id}")
-    public void deleteComments(@PathVariable(name = "ad_pk", required = true) Integer adPk,
+    public void deleteComment(@PathVariable(name = "ad_pk", required = true) Integer adPk,
                                @PathVariable(required = true) Integer id,
                                Authentication authentication) {
-        commentService.deleteComments(adPk, id, authentication);
+        try {
+            commentService.deleteComment(adPk, id, authentication);
+        } catch (CommentNotFoundException e) {
+            ResponseEntity.notFound().build();
+        }
     }
 
     @Operation(
@@ -218,11 +256,18 @@ public class AdsController {
     })
 
     @PatchMapping("/{ad_pk}/comments/{id}")
-    public CommentDto updateComments(@PathVariable(name = "ad_pk", required = true) Integer adPk,
+    public ResponseEntity<CommentDto> updateComments(@PathVariable(name = "ad_pk", required = true) Integer adPk,
                                      @PathVariable(required = true) Integer id,
                                      @RequestBody CommentDto commentDto,
                                      Authentication authentication) {
-        return commentService.updateComments(adPk, id, commentDto, authentication);
+        CommentDto result = null;
+        try {
+            result = commentService.updateComment(adPk, id, commentDto, authentication);
+        }catch (CommentNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(result);
+
     }
 
     @Operation(

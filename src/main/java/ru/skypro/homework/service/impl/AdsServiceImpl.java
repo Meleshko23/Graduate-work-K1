@@ -6,12 +6,18 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
+import ru.skypro.homework.exception.AdsNotFoundException;
 import ru.skypro.homework.mapper.AdsMapper;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.model.Ads;
+import ru.skypro.homework.model.Comment;
 import ru.skypro.homework.model.Image;
+import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdsRepository;
+import ru.skypro.homework.repository.CommentRepository;
+import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdsService;
+import ru.skypro.homework.service.CommentService;
 import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
 
@@ -27,6 +33,9 @@ public class AdsServiceImpl implements AdsService {
     private final UserMapper userMapper;
     private final ImageService imageService;
     private final UserService userService;
+    //    private final CommentService commentService;
+    private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
 
     @Override
     public ResponseWrapperAds getAllAds() {
@@ -49,7 +58,7 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public Ads getAdsById(Integer id) {
-        return adsRepository.findById(id).orElseThrow(RuntimeException::new); // обработать исключение!
+        return adsRepository.findById(id).orElseThrow(AdsNotFoundException::new); // обработать исключение!
     }
 
     @Override
@@ -62,8 +71,14 @@ public class AdsServiceImpl implements AdsService {
     public void removeAds(Integer id, Authentication authentication) {
         Ads ads = getAdsById(id);
 
+        List<Comment> comments = ads.getComments();
+        comments.stream()
+                .forEach(comment -> commentRepository.deleteById(comment.getId()));
+
+
 //        checkIfUserCanAlterAds(authentication, ads); // доработать метод проверки
-        adsRepository.delete(ads);
+//        adsRepository.delete(ads);
+        adsRepository.deleteById(id);
     }
 
     @Override
@@ -83,7 +98,11 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public ResponseWrapperAds getAllAdsForUser(String username) {
-        List<Ads> userAdsList = adsRepository.findAdsByUser(username);
+        User user = userRepository.findUserByEmail(username).get();
+        if (user == null) {
+
+        }
+        List<Ads> userAdsList = adsRepository.findAdsByUser(user);
         return adsMapper.INSTANCE.adsListToResponseWrapperAds(userAdsList.size(), userAdsList);
 
     }
