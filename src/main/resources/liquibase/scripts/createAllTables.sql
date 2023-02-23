@@ -8,7 +8,7 @@ create table users
     first_name varchar not null,
     last_name  varchar not null,
     phone      varchar not null,
-    reg_date   varchar not null,
+    reg_date   date    not null,
     city       varchar,
     role       varchar not null
 );
@@ -23,7 +23,7 @@ create table ads
 create table comments
 (
     id        Serial primary key,
-    create_at varchar not null,
+    create_at date    not null,
     text      varchar not null,
     author    int REFERENCES users (id) on delete cascade,
     ads_id    int REFERENCES ads (id) on delete cascade
