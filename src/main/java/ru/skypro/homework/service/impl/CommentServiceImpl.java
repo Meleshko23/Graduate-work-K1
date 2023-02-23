@@ -48,10 +48,14 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentDto createNewComment(Integer adsId, CommentDto commentDto) {
+    public CommentDto createNewComment(Integer adsId, CommentDto commentDto, Authentication authentication) {
         Ads ads = adsService.getAdsById(adsId); // возможно исключение AdsNotFoundException
+        UserDto userDto = userService.getUserByEmail(authentication.getName());
+        User currentUser = userMapper.userDtoToUser(userDto);
+
         Comment comment = INSTANCE.commentDtoToComment(commentDto);
         comment.setAds(ads);
+        comment.setUser(currentUser);
         Comment result = commentRepository.save(comment);
         return INSTANCE.commentToCommentDto(result);
     }
@@ -77,15 +81,9 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentRepository.findAdsComment(adPk, id)
                 .orElseThrow(CommentNotFoundException::new);
 
-        UserDto user = userService.getUserByEmail(authentication.getName());
-        User currentUser = userMapper.userDtoToUser(user);
-
-//        Comment updateComment = INSTANCE.commentDtoToComment(commentDto);
-
 ////        checkIfUserCanAlterComment(authentication, comment); // доработать метод проверки
         comment.setText(commentDto.getText());
         comment.setCreateAt(commentDto.getCreateAt());
-        comment.setUser(currentUser);
         commentRepository.save(comment);
 
         return INSTANCE.commentToCommentDto(comment);

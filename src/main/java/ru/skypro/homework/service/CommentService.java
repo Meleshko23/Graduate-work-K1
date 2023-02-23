@@ -11,7 +11,7 @@ public interface CommentService {
 
     ResponseWrapperComment getAllCommentsForAdsWithId(Integer adsId);
 
-    CommentDto createNewComment(Integer adsId, CommentDto commentDto);
+    CommentDto createNewComment(Integer adsId, CommentDto commentDto, Authentication authentication);
 
     CommentDto getComment(Integer adPk, Integer id);
 

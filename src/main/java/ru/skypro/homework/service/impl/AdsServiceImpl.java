@@ -52,7 +52,9 @@ public class AdsServiceImpl implements AdsService {
         Ads savedAds = adsRepository.save(ads);
 
         Image adsImage = imageService.createImage(image, savedAds); // а если неск фото
-        savedAds.setImages(List.of(adsImage));
+        adsImage.setAds(savedAds);
+        adsImage.setUser(userMapper.INSTANCE.userDtoToUser(userDto));
+
         return adsMapper.INSTANCE.adsToAdsDto(savedAds);
     }
 
