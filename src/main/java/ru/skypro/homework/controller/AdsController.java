@@ -42,8 +42,8 @@ public class AdsController {
     })
 
     @GetMapping
-    public ResponseWrapperAds getAllAds() {
-        return adsService.getAllAds();
+    public ResponseEntity<ResponseWrapperAds> getAllAds(@RequestParam(required = false) String title) {
+        return ResponseEntity.ok(adsService.getAllAds(title));
     }
 
     @Operation(
@@ -291,13 +291,14 @@ public class AdsController {
             @ApiResponse(responseCode = "404", description = "Not Found")})
 
     @GetMapping("/me")
-    public ResponseWrapperAds getAdsMe(//@RequestParam(name = "authenticated", required = false) boolean authenticated, // @RequestParam delete???
-                                       //@RequestParam(name = "authorities[0].authority", required = false) String authority,
-                                       //@RequestParam(name = "credentials", required = false) Object credentials,
-                                       //@RequestParam(name = "details", required = false) Object details,
-                                       //@RequestParam(name = "principal", required = false) Object principal,
-                                       Authentication authentication) {
-        return adsService.getAllAdsForUser(authentication.getName());
+    public ResponseEntity<ResponseWrapperAds> getAdsMe(Authentication authentication) {
+        return ResponseEntity.ok(adsService.getAllAdsForUser(authentication.getName()));
+    }
+
+    //    Поиск обьявлений
+    @GetMapping(params = {"search"})
+    public ResponseEntity<ResponseWrapperAds> findAds(@RequestParam(required = false) String search) {
+        return ResponseEntity.ok(adsService.findAds(search));
     }
 
 }

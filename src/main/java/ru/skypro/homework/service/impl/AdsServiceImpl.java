@@ -17,11 +17,12 @@ import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdsService;
-import ru.skypro.homework.service.CommentService;
 import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
 
 import java.util.List;
+
+import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -38,8 +39,15 @@ public class AdsServiceImpl implements AdsService {
     private final UserRepository userRepository;
 
     @Override
-    public ResponseWrapperAds getAllAds() {
-        List<Ads> allAds = adsRepository.findAll();
+    public ResponseWrapperAds getAllAds(String title) {
+        List<Ads> allAds;
+
+        if (!isEmpty(title)) {
+            allAds = adsRepository.findByTitleContainsOrderByTitle(title);
+        } else {
+            allAds = adsRepository.findAll();
+        }
+
         return adsMapper.INSTANCE.adsListToResponseWrapperAds(allAds.size(), allAds);
     }
 
@@ -107,6 +115,15 @@ public class AdsServiceImpl implements AdsService {
         List<Ads> userAdsList = adsRepository.findAdsByUser(user);
         return adsMapper.INSTANCE.adsListToResponseWrapperAds(userAdsList.size(), userAdsList);
 
+    }
+
+    @Override
+    public ResponseWrapperAds findAds(String search) {
+        List<Ads> adsDtoDtoList = adsRepository.findAds(search);
+//        ResponseWrapperAds responseWrapperAds = new ResponseWrapperAds();
+//        responseWrapperAds.setCount(adsDtoDtoList.size());
+//        responseWrapperAds.setResults(adsDtoDtoList);
+        return adsMapper.INSTANCE.adsListToResponseWrapperAds(adsDtoDtoList.size(), adsDtoDtoList);
     }
 
 }

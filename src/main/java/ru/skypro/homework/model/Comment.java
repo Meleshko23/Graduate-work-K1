@@ -13,7 +13,7 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private LocalDate createAt; // LocalDataTime???
+    private LocalDate createAt;
     private String text;
 
     @ManyToOne
