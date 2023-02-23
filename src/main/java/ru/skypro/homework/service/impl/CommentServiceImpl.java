@@ -19,6 +19,7 @@ import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.CommentService;
 import ru.skypro.homework.service.UserService;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static ru.skypro.homework.mapper.CommentMapper.INSTANCE;
@@ -83,7 +84,7 @@ public class CommentServiceImpl implements CommentService {
 
 ////        checkIfUserCanAlterComment(authentication, comment); // доработать метод проверки
         comment.setText(commentDto.getText());
-        comment.setCreateAt(commentDto.getCreateAt());
+        comment.setCreateAt(LocalDate.parse(commentDto.getCreateAt()));
         commentRepository.save(comment);
 
         return INSTANCE.commentToCommentDto(comment);
