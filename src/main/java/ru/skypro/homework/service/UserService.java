@@ -1,5 +1,6 @@
 package ru.skypro.homework.service;
 
+import org.springframework.security.core.Authentication;
 import ru.skypro.homework.dto.UserDto;
 
 public interface UserService {
@@ -8,6 +9,6 @@ public interface UserService {
 
     UserDto getUserByEmail(String email);
 
-//    boolean checkIfUserIsAdmin(Authentication authentication);
+    void checkIfUserHasPermissionToAlter(Authentication authentication, String username);
 
 }

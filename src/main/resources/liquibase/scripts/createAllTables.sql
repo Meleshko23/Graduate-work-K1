@@ -31,7 +31,7 @@ create table comments
 create table images
 (
     id         Serial primary key,
-    file_path  varchar not null,
+    file_path  varchar,
     file_size  BIGINT  not null,
     media_type varchar not null,
     data       bytea,
