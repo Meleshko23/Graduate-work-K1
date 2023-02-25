@@ -35,7 +35,7 @@ public class ImageController {
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
 
-    @PatchMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @GetMapping(value = "{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<byte[]> getAdsImage(@PathVariable(required = true) Integer id) {
         return ResponseEntity.ok(imageService.getAdsImage(id));
     }

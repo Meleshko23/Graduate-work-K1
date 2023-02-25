@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,9 +42,10 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/set_password")
-    public NewPassword setPassword(@RequestBody NewPassword newPassword) {
-        return new NewPassword();
+    public ResponseEntity<NewPassword> setPassword(@RequestBody NewPassword newPassword) {
+        return ResponseEntity.ok(newPassword);
     }
 
     @Operation(
@@ -61,9 +64,10 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/me")
-    public UserDto getUser(Authentication authentication) {
-        return userService.getUserByEmail(authentication.getName());
+    public ResponseEntity<UserDto> getUser(Authentication authentication) {
+        return ResponseEntity.ok(userService.getUserByEmail(authentication.getName()));
     }
 
     @Operation(
@@ -84,10 +88,11 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
 
+    @PreAuthorize("isAuthenticated()")
     @PatchMapping("/me")
-    public UserDto updateUser(@RequestBody UserDto userDto,
-                              Authentication authentication) {
-        return userService.updateUser(userDto, authentication.getName());
+    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto,
+                                              Authentication authentication) {
+        return ResponseEntity.ok(userService.updateUser(userDto, authentication.getName()));
     }
 
     @Operation(
@@ -100,6 +105,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
 
+    @PreAuthorize("isAuthenticated()")
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public UserDto updateUserImage(@RequestPart MultipartFile image) {
         return new UserDto();
