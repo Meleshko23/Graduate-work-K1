@@ -313,7 +313,7 @@ public class AdsController {
 
     //    Обновление фото объявления
     @PreAuthorize("isAuthenticated()")
-    @PatchMapping(value = "{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<byte[]> updateAdsImage(@PathVariable Integer id,
                                                  @RequestParam MultipartFile image,
                                                  Authentication authentication) {

@@ -34,7 +34,7 @@ public class AdsServiceImpl implements AdsService {
     private final UserMapper userMapper;
     private final ImageService imageService;
     private final UserService userService;
-    //    private final CommentService commentService;
+//    private final CommentService commentService;
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
 
