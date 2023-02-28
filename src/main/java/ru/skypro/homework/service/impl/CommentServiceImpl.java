@@ -2,6 +2,8 @@ package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.CommentDto;
@@ -37,6 +39,8 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final UserService userService;
 
+    private final Logger logger = LoggerFactory.getLogger(CommentServiceImpl.class);
+
 
     @Override
     public ResponseWrapperComment getAllCommentsForAdsWithId(Integer adsId) {
@@ -62,14 +66,13 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDto getComment(Integer adPk, Integer id) {
-        Comment comment = commentRepository.findAdsComment(adPk, id).orElseThrow(CommentNotFoundException::new);
+        Comment comment = commentRepository.findAdsComment(adPk,id).orElseThrow(CommentNotFoundException::new);
         return INSTANCE.commentToCommentDto(comment);
     }
 
     @Override
     public void deleteComment(Integer adPk, Integer id, Authentication authentication) {
-        Comment comment = commentRepository.findAdsComment(adPk, id).orElseThrow(CommentNotFoundException::new);
-
+        Comment comment = commentRepository.findAdsComment(adPk,id).orElseThrow(CommentNotFoundException::new);
 //        checkIfUserCanAlterComment(authentication, comment); // доработать метод проверки
 
         commentRepository.delete(comment);
@@ -77,7 +80,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDto updateComment(Integer adPk, Integer id, CommentDto commentDto, Authentication authentication) {
-        Comment comment = commentRepository.findAdsComment(adPk, id)
+        Comment comment = commentRepository.findAdsComment(adPk,id)
                 .orElseThrow(CommentNotFoundException::new);
 
 //        checkIfUserCanAlterComment(authentication, comment); // доработать метод проверки
