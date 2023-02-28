@@ -8,7 +8,7 @@ create table users
     first_name varchar not null,
     last_name  varchar not null,
     phone      varchar not null,
-    reg_date   varchar not null,
+    reg_date   date    not null,
     city       varchar,
     role       varchar not null
 );
@@ -31,7 +31,7 @@ create table comments
 create table images
 (
     id         Serial primary key,
-    file_path  varchar not null,
+    file_path  varchar,
     file_size  BIGINT  not null,
     media_type varchar not null,
     data       bytea,

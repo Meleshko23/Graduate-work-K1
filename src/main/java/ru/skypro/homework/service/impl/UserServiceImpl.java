@@ -2,7 +2,9 @@ package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.model.User;
@@ -32,6 +34,17 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserByEmail(String email) {
         User user = userRepository.findUserByEmail(email); // обработать исключение!
         return userMapper.userToUserDto(user);
+    }
+
+    @Override
+    public void checkIfUserHasPermissionToAlter(Authentication authentication, String username) {
+        boolean matchUser = authentication.getName().equals(username);
+        boolean userIsAdmin = authentication.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().contains(Role.ADMIN.name()));
+
+        if (!(userIsAdmin || matchUser)) {
+            throw new RuntimeException(); // обработать исключение!
+        }
     }
 
 }

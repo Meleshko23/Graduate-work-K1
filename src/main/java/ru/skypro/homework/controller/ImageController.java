@@ -9,9 +9,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.ImageDto;
+import ru.skypro.homework.service.ImageService;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -19,6 +20,8 @@ import ru.skypro.homework.dto.ImageDto;
 @RestController
 @RequestMapping("/image")
 public class ImageController {
+
+    private final ImageService imageService;
 
     @Operation(
             summary = "Обновить изображение",
@@ -32,9 +35,8 @@ public class ImageController {
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
 
-    @PatchMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ImageDto updateAdsImage(@PathVariable(required = true) Integer id,
-                                   @RequestPart MultipartFile image) {
-        return new ImageDto();
+    @GetMapping(value = "{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<byte[]> getAdsImage(@PathVariable(required = true) Integer id) {
+        return ResponseEntity.ok(imageService.getAdsImage(id));
     }
 }

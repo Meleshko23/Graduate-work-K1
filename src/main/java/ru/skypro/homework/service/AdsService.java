@@ -22,4 +22,7 @@ public interface AdsService {
     AdsDto updateAdsById(Integer id, CreateAdsDto createAdsDto, Authentication authentication);
 
     ResponseWrapperAds getAllAdsForUser(String username);
+
+    ResponseWrapperAds findAds(String search);
+
 }

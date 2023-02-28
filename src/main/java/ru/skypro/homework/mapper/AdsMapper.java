@@ -40,7 +40,7 @@ public interface AdsMapper {
 
     @Mapping(source = "size", target = "count")
     @Mapping(source = "userAdsList", target = "results")
-    ResponseWrapperAds adsListToResponseWrapperAds(int size, List<Ads> userAdsList);
+    ResponseWrapperAds adsListToResponseWrapperAds(Integer size, List<Ads> userAdsList);
 
     default String mapImageToString(Image image) {
         return Arrays.toString(image.getData());

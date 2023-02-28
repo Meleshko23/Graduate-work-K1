@@ -1,6 +1,5 @@
 package ru.skypro.homework.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import ru.skypro.homework.dto.Role;
 

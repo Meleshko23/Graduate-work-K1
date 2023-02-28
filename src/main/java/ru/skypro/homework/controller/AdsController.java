@@ -7,11 +7,17 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
+import ru.skypro.homework.exception.AdsNotFoundException;
+import ru.skypro.homework.exception.CommentNotFoundException;
+import ru.skypro.homework.exception.CommentsNotFoundException;
 import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.CommentService;
 import ru.skypro.homework.service.ImageService;
@@ -38,8 +44,8 @@ public class AdsController {
     })
 
     @GetMapping
-    public ResponseWrapperAds getAllAds(String title) {
-        return adsService.getAllAds(title);
+    public ResponseEntity<ResponseWrapperAds> getAllAds(@RequestParam(required = false) String title) {
+        return ResponseEntity.ok(adsService.getAllAds(title));
     }
 
     @Operation(
@@ -58,11 +64,12 @@ public class AdsController {
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public AdsDto addAds(@RequestBody( required = true) CreateAdsDto createAdsDto,
-                         @RequestPart MultipartFile image,
-                         Authentication authentication) {
-        return adsService.createAds(createAdsDto, image, authentication);
+    public ResponseEntity<AdsDto> addAds(@RequestPart("properties") CreateAdsDto createAdsDto,
+                                         @RequestPart("image") MultipartFile image,
+                                         Authentication authentication) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(adsService.createAds(createAdsDto, image, authentication));
     }
 
     @Operation(
@@ -77,9 +84,16 @@ public class AdsController {
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{ad_pk}/comments")
-    public ResponseWrapperComment getComments(@PathVariable(name = "ad_pk", required = true) Integer adPk) {
-        return commentService.getAllCommentsForAdsWithId(adPk);
+    public ResponseEntity<ResponseWrapperComment> getComments(@PathVariable(name = "ad_pk", required = true) Integer adPk) {
+        ResponseWrapperComment result = null;
+        try {
+            result = commentService.getAllCommentsForAdsWithId(adPk);
+        } catch (AdsNotFoundException | CommentsNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(result);
     }
 
     @Operation(
@@ -98,10 +112,18 @@ public class AdsController {
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/{ad_pk}/comments")
-    public CommentDto addComments(@PathVariable(name = "ad_pk", required = true) Integer adPk,
-                                  @RequestBody(required = true) CommentDto commentDto) {
-        return commentService.createNewComment(adPk, commentDto);
+    public ResponseEntity<CommentDto> addComments(@PathVariable(name = "ad_pk", required = true) Integer adPk,
+                                                  @RequestBody(required = true) CommentDto commentDto,
+                                                  Authentication authentication) {
+        CommentDto result = null;
+        try {
+            result = commentService.createNewComment(adPk, commentDto, authentication);
+        } catch (AdsNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(result);
     }
 
     @Operation(
@@ -116,9 +138,16 @@ public class AdsController {
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
-    public FullAdsDto getFullAd(@PathVariable(required = true) Integer id) {
-        return adsService.getFullAdsById(id);
+    public ResponseEntity<FullAdsDto> getFullAd(@PathVariable(required = true) Integer id) {
+        FullAdsDto result = null;
+        try {
+            result = adsService.getFullAdsById(id);
+        } catch (AdsNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(result);
     }
 
     @Operation(
@@ -133,10 +162,12 @@ public class AdsController {
             @ApiResponse(responseCode = "403", description = "Forbidden")
     })
 
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{id}")
-    public void removeAds(@PathVariable(required = true) Integer id,
-                          Authentication authentication) {
+    public ResponseEntity<Void> removeAds(@PathVariable(required = true) Integer id,
+                                          Authentication authentication) {
         adsService.removeAds(id, authentication);
+        return ResponseEntity.noContent().build();
     }
 
     @Operation(
@@ -155,11 +186,18 @@ public class AdsController {
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
 
+    @PreAuthorize("isAuthenticated()")
     @PatchMapping("/{id}")
-    public AdsDto updateAds(@PathVariable(required = true) Integer id,
-                            @RequestBody CreateAdsDto createAdsDto,
-                            Authentication authentication) {
-        return adsService.updateAdsById(id, createAdsDto, authentication);
+    public ResponseEntity<AdsDto> updateAds(@PathVariable(required = true) Integer id,
+                                            @RequestBody CreateAdsDto createAdsDto,
+                                            Authentication authentication) {
+        AdsDto result = null;
+        try {
+            result = adsService.updateAdsById(id, createAdsDto, authentication);
+        } catch (AdsNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(result);
     }
 
     @Operation(
@@ -174,10 +212,17 @@ public class AdsController {
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{ad_pk}/comments/{id}")
-    public CommentDto getComments(@PathVariable(name = "ad_pk", required = true) Integer adPk,
-                                  @PathVariable(required = true) Integer id) {
-        return commentService.getComments(adPk, id);
+    public ResponseEntity<CommentDto> getComments(@PathVariable(name = "ad_pk", required = true) Integer adPk,
+                                                  @PathVariable(required = true) Integer id) {
+        CommentDto result = null;
+        try {
+            result = commentService.getComment(adPk, id);
+        } catch (CommentNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(result);
     }
 
     @Operation(
@@ -194,11 +239,17 @@ public class AdsController {
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
 
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{ad_pk}/comments/{id}")
-    public void deleteComments(@PathVariable(name = "ad_pk", required = true) Integer adPk,
-                               @PathVariable(required = true) Integer id,
-                               Authentication authentication) {
-        commentService.deleteComments(adPk, id, authentication);
+    public ResponseEntity<Void> deleteComments(@PathVariable(name = "ad_pk", required = true) Integer adPk,
+                                               @PathVariable(required = true) Integer id,
+                                               Authentication authentication) {
+        try {
+            commentService.deleteComment(adPk, id, authentication);
+        } catch (CommentNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().build();
     }
 
     @Operation(
@@ -217,12 +268,20 @@ public class AdsController {
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
 
+    @PreAuthorize("isAuthenticated()")
     @PatchMapping("/{ad_pk}/comments/{id}")
-    public CommentDto updateComments(@PathVariable(name = "ad_pk", required = true) Integer adPk,
-                                     @PathVariable(required = true) Integer id,
-                                     @RequestBody CommentDto commentDto,
-                                     Authentication authentication) {
-        return commentService.updateComments(adPk, id, commentDto, authentication);
+    public ResponseEntity<CommentDto> updateComments(@PathVariable(name = "ad_pk", required = true) Integer adPk,
+                                                     @PathVariable(required = true) Integer id,
+                                                     @RequestBody CommentDto commentDto,
+                                                     Authentication authentication) {
+        CommentDto result = null;
+        try {
+            result = commentService.updateComment(adPk, id, commentDto, authentication);
+        } catch (CommentNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(result);
+
     }
 
     @Operation(
@@ -240,14 +299,26 @@ public class AdsController {
 
             @ApiResponse(responseCode = "404", description = "Not Found")})
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/me")
-    public ResponseWrapperAds getAdsMe(//@RequestParam(name = "authenticated", required = false) boolean authenticated, // @RequestParam delete???
-                                       //@RequestParam(name = "authorities[0].authority", required = false) String authority,
-                                       //@RequestParam(name = "credentials", required = false) Object credentials,
-                                       //@RequestParam(name = "details", required = false) Object details,
-                                       //@RequestParam(name = "principal", required = false) Object principal,
-                                       Authentication authentication) {
-        return adsService.getAllAdsForUser(authentication.getName());
+    public ResponseEntity<ResponseWrapperAds> getAdsMe(Authentication authentication) {
+        return ResponseEntity.ok(adsService.getAllAdsForUser(authentication.getName()));
+    }
+
+    //    Поиск обьявлений
+    @GetMapping(params = {"search"})
+    public ResponseEntity<ResponseWrapperAds> findAds(@RequestParam(required = false) String search) {
+        return ResponseEntity.ok(adsService.findAds(search));
+    }
+
+    //    Обновление фото объявления
+    @PreAuthorize("isAuthenticated()")
+    @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<byte[]> updateAdsImage(@PathVariable Integer id,
+                                                 @RequestParam MultipartFile image,
+                                                 Authentication authentication) {
+        byte[] imageBytes = imageService.updateAdsImage(id, image, authentication);
+        return ResponseEntity.ok(imageBytes);
     }
 
 }
