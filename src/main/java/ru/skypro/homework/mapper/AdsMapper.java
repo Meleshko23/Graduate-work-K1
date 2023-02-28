@@ -43,6 +43,6 @@ public interface AdsMapper {
     ResponseWrapperAds adsListToResponseWrapperAds(Integer size, List<Ads> userAdsList);
 
     default String mapImageToString(Image image) {
-        return Arrays.toString(image.getData());
+        return null;
     }
 }

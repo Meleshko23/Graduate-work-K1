@@ -39,16 +39,12 @@ public class AdsServiceImpl implements AdsService {
     private final UserRepository userRepository;
 
     @Override
-    public ResponseWrapperAds getAllAds(String title) {
-        List<Ads> allAds;
-
-        if (!isEmpty(title)) {
-            allAds = adsRepository.findByTitleContainsOrderByTitle(title);
-        } else {
-            allAds = adsRepository.findAll();
-        }
-
-        return adsMapper.INSTANCE.adsListToResponseWrapperAds(allAds.size(), allAds);
+    public ResponseWrapperAds getAllAds() {
+        List<AdsDto> allAdsDto = adsMapper.ListAdsToListAdsDto(adsRepository.findAll());
+        ResponseWrapperAds responseWrapperAds = new ResponseWrapperAds();
+        responseWrapperAds.setCount(allAdsDto.size());
+        responseWrapperAds.setResults(allAdsDto);
+        return responseWrapperAds;
     }
 
     @Override
@@ -81,13 +77,12 @@ public class AdsServiceImpl implements AdsService {
     public void removeAds(Integer id, Authentication authentication) {
         Ads ads = getAdsById(id);
 
+//        checkIfUserCanAlterAds(authentication, ads); // доработать метод проверки
+
         List<Comment> comments = ads.getComments();
         comments.stream()
                 .forEach(comment -> commentRepository.deleteById(comment.getId()));
 
-
-//        checkIfUserCanAlterAds(authentication, ads); // доработать метод проверки
-//        adsRepository.delete(ads);
         adsRepository.deleteById(id);
     }
 
@@ -96,6 +91,7 @@ public class AdsServiceImpl implements AdsService {
         Ads oldAds = getAdsById(id);
 
 //        checkIfUserCanAlterAds(authentication, oldAds); // доработать метод проверки
+
         Ads infoToUpdate = adsMapper.INSTANCE.createAdsDtoToAds(createAdsDto);
 
         oldAds.setPrice(infoToUpdate.getPrice());
@@ -108,12 +104,13 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public ResponseWrapperAds getAllAdsForUser(String username) {
-        User user = userRepository.findUserByEmail(username).get();
-        if (user == null) {
-
-        }
-        List<Ads> userAdsList = adsRepository.findAdsByUser(user);
-        return adsMapper.INSTANCE.adsListToResponseWrapperAds(userAdsList.size(), userAdsList);
+//        User user = userRepository.findUserByEmail(username).get();
+        List<Ads> userAdsList = adsRepository.findAdsByUserEmail(username);
+        List<AdsDto> userAdsDtoList = adsMapper.ListAdsToListAdsDto(userAdsList);
+        ResponseWrapperAds responseWrapperAds = new ResponseWrapperAds();
+        responseWrapperAds.setCount(userAdsDtoList.size());
+        responseWrapperAds.setResults(userAdsDtoList);
+        return responseWrapperAds;
 
     }
 
@@ -124,6 +121,12 @@ public class AdsServiceImpl implements AdsService {
 //        responseWrapperAds.setCount(adsDtoDtoList.size());
 //        responseWrapperAds.setResults(adsDtoDtoList);
         return adsMapper.INSTANCE.adsListToResponseWrapperAds(adsDtoDtoList.size(), adsDtoDtoList);
+    }
+
+    private void checkIfUserCanAlterAds(Authentication authentication, Ads ads){
+        if(ads.getUser().getEmail() != authentication.getName()){
+            throw new RuntimeException("Вы не имеете права доступа");
+        }
     }
 
 }

@@ -7,7 +7,7 @@ public interface UserService {
 
     UserDto updateUser(UserDto userDto, String name);
 
-    UserDto getUserByEmail(String email);
+    UserDto getUserByEmail(String username);
 
     void checkIfUserHasPermissionToAlter(Authentication authentication, String username);
 

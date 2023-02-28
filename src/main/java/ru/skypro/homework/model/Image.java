@@ -17,7 +17,7 @@ public class Image {
     private String mediaType;
     private byte[] data;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "ads_id")
     @JsonIgnore
     private Ads ads;

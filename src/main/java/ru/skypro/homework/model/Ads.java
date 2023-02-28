@@ -30,8 +30,8 @@ public class Ads {
     @JoinColumn(name = "author")
     private User user;
 
-    @OneToMany(mappedBy = "ads")
-    private List<Image> images;
+    @OneToOne(mappedBy = "ads")
+    private Image images;
 
     @OneToMany(mappedBy = "ads")
     private List<Comment> comments;

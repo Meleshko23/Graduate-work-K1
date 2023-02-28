@@ -20,6 +20,7 @@ import ru.skypro.homework.service.CommentService;
 import ru.skypro.homework.service.UserService;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static ru.skypro.homework.mapper.CommentMapper.INSTANCE;
@@ -42,9 +43,6 @@ public class CommentServiceImpl implements CommentService {
         Ads adsById = adsService.getAdsById(adsId); // возможно исключение AdsNotFoundException
 
         List<Comment> comments = adsById.getComments();
-        if (comments.isEmpty()) {
-            throw new CommentsNotFoundException();
-        }
         return INSTANCE.commentsListToResponseWrapperComment(comments.size(), comments);
     }
 
@@ -57,6 +55,7 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = INSTANCE.commentDtoToComment(commentDto);
         comment.setAds(ads);
         comment.setUser(currentUser);
+        comment.setCreateAt(LocalDate.now());
         Comment result = commentRepository.save(comment);
         return INSTANCE.commentToCommentDto(result);
     }
@@ -72,7 +71,6 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentRepository.findAdsComment(adPk, id).orElseThrow(CommentNotFoundException::new);
 
 //        checkIfUserCanAlterComment(authentication, comment); // доработать метод проверки
-//        commentRepository.delete(comment);
 
         commentRepository.delete(comment);
     }
@@ -82,7 +80,7 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentRepository.findAdsComment(adPk, id)
                 .orElseThrow(CommentNotFoundException::new);
 
-////        checkIfUserCanAlterComment(authentication, comment); // доработать метод проверки
+//        checkIfUserCanAlterComment(authentication, comment); // доработать метод проверки
         comment.setText(commentDto.getText());
         comment.setCreateAt(LocalDate.parse(commentDto.getCreateAt()));
         commentRepository.save(comment);
@@ -106,4 +104,10 @@ public class CommentServiceImpl implements CommentService {
 //    public void deleteCommentById(Integer id) {
 //        commentRepository.deleteById(id);
 //    }
+
+    private void checkIfUserCanAlterComment(Authentication authentication, Comment comment){
+        if(comment.getUser().getEmail() != authentication.getName()){
+            throw new RuntimeException("Вы не имеете права доступа");
+        }
+    }
 }

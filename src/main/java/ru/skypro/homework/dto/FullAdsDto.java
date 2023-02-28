@@ -10,7 +10,7 @@ public class FullAdsDto {
     private String authorLastName;
     private String description;
     private String email;
-    private List<String> images;
+    private String images;
     private String phone;
     private int pk;
     private int price;

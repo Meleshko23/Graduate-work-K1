@@ -9,7 +9,7 @@ import ru.skypro.homework.dto.ResponseWrapperAds;
 import ru.skypro.homework.model.Ads;
 
 public interface AdsService {
-    ResponseWrapperAds getAllAds(String title);
+    ResponseWrapperAds getAllAds();
 
     Ads getAdsById(Integer id);
 

@@ -44,8 +44,8 @@ public class AdsController {
     })
 
     @GetMapping
-    public ResponseEntity<ResponseWrapperAds> getAllAds(@RequestParam(required = false) String title) {
-        return ResponseEntity.ok(adsService.getAllAds(title));
+    public ResponseEntity<ResponseWrapperAds> getAllAds() {
+        return ResponseEntity.ok(adsService.getAllAds());
     }
 
     @Operation(
@@ -191,13 +191,11 @@ public class AdsController {
     public ResponseEntity<AdsDto> updateAds(@PathVariable(required = true) Integer id,
                                             @RequestBody CreateAdsDto createAdsDto,
                                             Authentication authentication) {
-        AdsDto result = null;
         try {
-            result = adsService.updateAdsById(id, createAdsDto, authentication);
+            return ResponseEntity.ok(adsService.updateAdsById(id, createAdsDto, authentication));
         } catch (AdsNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(result);
     }
 
     @Operation(

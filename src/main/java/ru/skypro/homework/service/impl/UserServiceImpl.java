@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import liquibase.exception.RollbackImpossibleException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -21,7 +22,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto updateUser(UserDto userDto, String username) {
-        User user = userRepository.findUserByEmail(username); // обработать исключение!
+        User user = userRepository.findUserByEmail(username).orElseThrow(RuntimeException::new); // обработать исключение!
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setPhone(userDto.getPhone());
@@ -32,7 +33,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUserByEmail(String email) {
-        User user = userRepository.findUserByEmail(email); // обработать исключение!
+        User user = userRepository.findUserByEmail(email).orElseThrow(RuntimeException::new); // обработать исключение!
         return userMapper.userToUserDto(user);
     }
 
