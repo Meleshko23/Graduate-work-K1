@@ -24,5 +24,5 @@ public interface CommentMapper {
 
     @Mapping(source = "size", target = "count")
     @Mapping(source = "comments", target = "results")
-    ResponseWrapperComment commentsListToResponseWrapperComment(int size, List<Comment> comments);
+    ResponseWrapperComment commentsListToResponseWrapperComment(Integer size, List<Comment> comments);
 }

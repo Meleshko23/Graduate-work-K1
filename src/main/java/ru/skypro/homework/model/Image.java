@@ -22,8 +22,9 @@ public class Image {
     @JsonIgnore
     private Ads ads;
 
-    @OneToOne
-    @JoinColumn(name = "author")
-    @JsonIgnore
-    private User user;
+//    аватар
+@OneToOne
+@JoinColumn(name = "author")
+@JsonIgnore
+private User user;
 }
