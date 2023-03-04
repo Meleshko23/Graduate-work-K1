@@ -67,7 +67,7 @@ public class UserController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/me")
     public ResponseEntity<UserDto> getUser(Authentication authentication) {
-        return ResponseEntity.ok(userService.getUserByEmail(authentication.getName()));
+        return ResponseEntity.ok(userService.getUserDtoByUsername(authentication.getName()));
     }
 
     @Operation(

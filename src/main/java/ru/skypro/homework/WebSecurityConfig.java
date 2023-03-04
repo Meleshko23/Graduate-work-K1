@@ -2,6 +2,8 @@ package ru.skypro.homework;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,6 +34,17 @@ public class WebSecurityConfig {
         return new InMemoryUserDetailsManager(user);
     }
 
+    @Primary
+    @Bean
+    public InMemoryUserDetailsManager userDetailsServiceAdmin() {
+        UserDetails user = User.withDefaultPasswordEncoder()
+                .username("admin@gmail.com")
+                .password("password1")
+                .roles("ADMIN")
+                .build();
+        return new InMemoryUserDetailsManager(user);
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -40,6 +53,7 @@ public class WebSecurityConfig {
                         authz
                                 .mvcMatchers(AUTH_WHITELIST).permitAll()
                                 .mvcMatchers("/ads/**", "/users/**").authenticated()
+                                .antMatchers(HttpMethod.GET, "/ads", "/ads/*/image", "/image/**", "/users/*/image").permitAll()
 
                 )
                 .cors().and()
