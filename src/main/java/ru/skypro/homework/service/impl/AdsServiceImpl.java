@@ -82,8 +82,9 @@ public class AdsServiceImpl implements AdsService {
 //        List<Comment> comments = ads.getComments();
 //        comments.stream()
 //                .forEach(comment -> commentRepository.deleteById(comment.getId()));
-        if (securityService.accessAds(authentication, id))
+        if (securityService.accessAds(authentication, id)) {
             adsRepository.deleteById(id);
+        }
     }
 
     @Override
@@ -123,11 +124,11 @@ public class AdsServiceImpl implements AdsService {
         return adsMapper.INSTANCE.adsListToResponseWrapperAds(adsDtoDtoList.size(), adsDtoDtoList);
     }
 
-    private void checkIfUserCanAlterAds(Authentication authentication, Ads ads) {
-        if (ads.getUser().getEmail() != authentication.getName()) {
-            throw new RuntimeException("Вы не имеете права доступа");
-        }
-    }
+//    private void checkIfUserCanAlterAds(Authentication authentication, Ads ads) {
+//        if (ads.getUser().getEmail() != authentication.getName()) {
+//            throw new RuntimeException("Вы не имеете права доступа");
+//        }
+//    }
 
 }
 

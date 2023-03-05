@@ -108,9 +108,9 @@ public class CommentServiceImpl implements CommentService {
 //        commentRepository.deleteById(id);
 //    }
 
-    private void checkIfUserCanAlterComment(Authentication authentication, Comment comment) {
-        if (comment.getUser().getEmail() != authentication.getName()) {
-            throw new RuntimeException("Вы не имеете права доступа");
-        }
-    }
+//    private void checkIfUserCanAlterComment(Authentication authentication, Comment comment) {
+//        if (comment.getUser().getEmail() != authentication.getName()) {
+//            throw new RuntimeException("Вы не имеете права доступа");
+//        }
+//    }
 }

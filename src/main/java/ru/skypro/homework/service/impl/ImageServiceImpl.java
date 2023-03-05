@@ -9,6 +9,7 @@ import ru.skypro.homework.model.Ads;
 import ru.skypro.homework.model.Image;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.service.ImageService;
+import ru.skypro.homework.service.SecurityService;
 import ru.skypro.homework.service.UserService;
 
 import java.io.IOException;
@@ -20,6 +21,7 @@ public class ImageServiceImpl implements ImageService {
 
     private final ImageRepository imageRepository;
     private final UserService userService;
+    private final SecurityService securityService;
 
     @Override
     public Image createImage(MultipartFile file, Ads ads) {

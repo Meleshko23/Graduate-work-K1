@@ -2,7 +2,6 @@ package ru.skypro.homework;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -20,8 +19,10 @@ public class WebSecurityConfig {
             "/swagger-ui.html",
             "/v3/api-docs",
             "/webjars/**",
-            "/ads",
-            "/login", "/register"
+            "/ads", "/image",
+            "/login", "/register",
+            "/users/me/image/*",
+            "/ads/{id}/image"
     };
 
     @Bean
@@ -31,18 +32,12 @@ public class WebSecurityConfig {
                 .password("password")
                 .roles("USER")
                 .build();
-        return new InMemoryUserDetailsManager(user);
-    }
-
-    @Primary
-    @Bean
-    public InMemoryUserDetailsManager userDetailsServiceAdmin() {
-        UserDetails user = User.withDefaultPasswordEncoder()
+        UserDetails admin = User.withDefaultPasswordEncoder()
                 .username("admin@gmail.com")
                 .password("password1")
-                .roles("ADMIN")
+                .roles("USER, ADMIN")
                 .build();
-        return new InMemoryUserDetailsManager(user);
+        return new InMemoryUserDetailsManager(user, admin);
     }
 
     @Bean

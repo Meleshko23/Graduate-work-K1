@@ -25,7 +25,8 @@ public class SecurityServiceImpl implements SecurityService {
     public boolean accessAds(Authentication authentication, Integer adsId) {
         Ads ads = adsRepository.findById(adsId).orElseThrow();
         Integer userAdsId = ads.getUser().getId();
-        User userId = userRepository.findUserByEmail(authentication.getName()).get();
+//        User userId = userRepository.findUserByEmail(authentication.getName()).get();
+        User userId = userRepository.findUserByEmail(authentication.getName()).orElseThrow(RuntimeException::new);
         return userId.equals(userAdsId) || accessRole(authentication);
     }
 
@@ -33,7 +34,7 @@ public class SecurityServiceImpl implements SecurityService {
     public boolean accessComments(Authentication authentication, Integer commentId) {
         Comment comment = commentRepository.findById(commentId).orElseThrow();
         Integer userIdComment = comment.getUser().getId();
-        User userId = userRepository.findUserByEmail(authentication.getName()).get();
+        Integer userId = userRepository.findUserByEmail(authentication.getName()).get().getId();
         return userId.equals(userIdComment) || accessRole(authentication);
     }
 
