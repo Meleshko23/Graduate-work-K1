@@ -58,9 +58,7 @@ public class AdsController {
                             schema = @Schema(implementation = AdsDto.class))),
 
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
-
             @ApiResponse(responseCode = "403", description = "Forbidden"),
-
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
 
@@ -106,9 +104,7 @@ public class AdsController {
                             schema = @Schema(implementation = CommentDto.class))),
 
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
-
             @ApiResponse(responseCode = "403", description = "Forbidden"),
-
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
 
@@ -156,9 +152,7 @@ public class AdsController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "No Content"),
-
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
-
             @ApiResponse(responseCode = "403", description = "Forbidden")
     })
 
@@ -166,6 +160,7 @@ public class AdsController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> removeAds(@PathVariable(required = true) Integer id,
                                           Authentication authentication) {
+        log.info("Was invoked delete ad by id = {} method", id);
         adsService.removeAds(id, authentication);
         return ResponseEntity.noContent().build();
     }
@@ -180,9 +175,7 @@ public class AdsController {
                             schema = @Schema(implementation = AdsDto.class))),
 
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
-
             @ApiResponse(responseCode = "403", description = "Forbidden"),
-
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
 
@@ -191,6 +184,7 @@ public class AdsController {
     public ResponseEntity<AdsDto> updateAds(@PathVariable(required = true) Integer id,
                                             @RequestBody CreateAdsDto createAdsDto,
                                             Authentication authentication) {
+        log.info("Was invoked update ad by id = {} method", id);
         try {
             return ResponseEntity.ok(adsService.updateAdsById(id, createAdsDto, authentication));
         } catch (AdsNotFoundException e) {
@@ -229,11 +223,8 @@ public class AdsController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
-
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
-
             @ApiResponse(responseCode = "403", description = "Forbidden"),
-
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
 
@@ -260,9 +251,7 @@ public class AdsController {
                             schema = @Schema(implementation = CommentDto.class))),
 
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
-
             @ApiResponse(responseCode = "403", description = "Forbidden"),
-
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
 
@@ -272,6 +261,7 @@ public class AdsController {
                                                      @PathVariable(required = true) Integer id,
                                                      @RequestBody CommentDto commentDto,
                                                      Authentication authentication) {
+        log.info("Was invoked update ad's = {} comment by id = {} method", adPk, id);
         CommentDto result = null;
         try {
             result = commentService.updateComment(adPk, id, commentDto, authentication);
@@ -311,19 +301,13 @@ public class AdsController {
 
     //    Обновление фото объявления
     @PreAuthorize("isAuthenticated()")
-    @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value = "{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<byte[]> updateAdsImage(@PathVariable Integer id,
                                                  @RequestParam MultipartFile image,
                                                  Authentication authentication) {
+        log.info("Was invoked updateAdsImage method from {}", ImageController.class.getSimpleName());
         byte[] imageBytes = imageService.updateAdsImage(id, image, authentication);
         return ResponseEntity.ok(imageBytes);
     }
-
-//    // produces в аннотации GetMapping нужно указать для того, чтобы браузер понимал, что передается картинка
-//    @GetMapping(value = "/images/{id}/", produces = {MediaType.IMAGE_PNG_VALUE})
-//    public byte[] getImage() {
-//        //тут пишем код, который вытаскивает entity из базы
-//        return entity.getImage();
-//    }
 
 }

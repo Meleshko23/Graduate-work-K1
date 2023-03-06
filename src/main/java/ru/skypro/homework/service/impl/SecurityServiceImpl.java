@@ -40,8 +40,13 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Override
     public boolean accessRole(Authentication authentication) {
-        return authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN"));
+        return authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ADMIN"));
 //        return authentication.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().contains(Role.ADMIN.name()));
+    }
+
+    @Override
+    public void accessImage(Authentication authentication, String username) {
+
     }
 
 }

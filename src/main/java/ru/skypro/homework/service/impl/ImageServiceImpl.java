@@ -34,7 +34,8 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public byte[] updateAdsImage(Integer id, MultipartFile file, Authentication authentication) {
         Image oldImage = getImageFromDB(id);
-        userService.checkIfUserHasPermissionToAlter(authentication, oldImage.getAds().getUser().getEmail());
+//        userService.checkIfUserHasPermissionToAlter(authentication, oldImage.getAds().getUser().getEmail());
+        securityService.accessImage(authentication, oldImage.getAds().getUser().getEmail());
         extractInfoFromFile(file, oldImage);
         Image savedImage = imageRepository.save(oldImage);
         return savedImage.getData();

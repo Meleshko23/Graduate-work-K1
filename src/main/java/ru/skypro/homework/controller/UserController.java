@@ -36,9 +36,7 @@ public class UserController {
                             schema = @Schema(implementation = NewPassword.class))),
 
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
-
             @ApiResponse(responseCode = "403", description = "Forbidden"),
-
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
 
@@ -58,15 +56,14 @@ public class UserController {
                             schema = @Schema(implementation = UserDto.class))),
 
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
-
             @ApiResponse(responseCode = "403", description = "Forbidden"),
-
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/me")
     public ResponseEntity<UserDto> getUser(Authentication authentication) {
+        log.info("Was invoked get user method");
         return ResponseEntity.ok(userService.getUserDtoByUsername(authentication.getName()));
     }
 
@@ -80,11 +77,8 @@ public class UserController {
                             schema = @Schema(implementation = UserDto.class))),
 
             @ApiResponse(responseCode = "204", description = "No Content"),
-
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
-
             @ApiResponse(responseCode = "403", description = "Forbidden"),
-
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
 
@@ -92,6 +86,7 @@ public class UserController {
     @PatchMapping("/me")
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto,
                                               Authentication authentication) {
+        log.info("Was invoked update user method");
         return ResponseEntity.ok(userService.updateUser(userDto, authentication.getName()));
     }
 
@@ -101,7 +96,6 @@ public class UserController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
-
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
 

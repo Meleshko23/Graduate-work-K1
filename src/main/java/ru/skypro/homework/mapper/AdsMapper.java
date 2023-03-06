@@ -10,7 +10,6 @@ import ru.skypro.homework.dto.ResponseWrapperAds;
 import ru.skypro.homework.model.Ads;
 import ru.skypro.homework.model.Image;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
@@ -36,6 +35,7 @@ public interface AdsMapper {
     @Mapping(source = "user.lastName", target = "authorLastName")
     @Mapping(source = "user.email", target = "email")
     @Mapping(source = "user.phone", target = "phone")
+    @Mapping(source = "images", target = "image")
     FullAdsDto adsToFullAdsDto(Ads ads);
 
     @Mapping(source = "size", target = "count")

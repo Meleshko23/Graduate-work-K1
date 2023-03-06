@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.ImageDto;
 import ru.skypro.homework.service.ImageService;
@@ -18,7 +19,7 @@ import ru.skypro.homework.service.ImageService;
 @RequiredArgsConstructor
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
-@RequestMapping("/image")
+@RequestMapping(path = "/image")
 public class ImageController {
 
     private final ImageService imageService;
@@ -29,13 +30,13 @@ public class ImageController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
-                    content = @Content(mediaType = "application/octet-stream", // или mediaType = "*/*"?
+                    content = @Content(mediaType = "application/octet-stream",
                             schema = @Schema(implementation = ImageDto.class))),
 
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
-
-    @GetMapping(value = "{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping(value = "{id}", produces = {MediaType.IMAGE_PNG_VALUE})
     public ResponseEntity<byte[]> getAdsImage(@PathVariable(required = true) Integer id) {
         return ResponseEntity.ok(imageService.getAdsImage(id));
     }

@@ -8,4 +8,7 @@ public interface SecurityService {
     boolean accessComments(Authentication authentication, Integer commentId);
 
     boolean accessRole(Authentication authentication);
+
+    void accessImage(Authentication authentication, String username);
+
 }
