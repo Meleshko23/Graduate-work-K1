@@ -17,5 +17,6 @@ public interface UserMapper {
     User userDtoToUser(UserDto userDTO);
 
     @Mapping(source = "username", target = "email")
+    @Mapping(target = "role", defaultValue = "USER")
     User registerToUser (RegisterReq req);
 }

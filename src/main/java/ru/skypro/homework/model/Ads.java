@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -30,8 +29,8 @@ public class Ads {
     @JoinColumn(name = "author")
     private User user;
 
-    @OneToOne(mappedBy = "ads")
-    private Image images;
+    @OneToOne(mappedBy = "ads", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Image image;
 
     @OneToMany(mappedBy = "ads")
     private List<Comment> comments;

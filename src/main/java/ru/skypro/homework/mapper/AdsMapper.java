@@ -10,6 +10,7 @@ import ru.skypro.homework.dto.ResponseWrapperAds;
 import ru.skypro.homework.model.Ads;
 import ru.skypro.homework.model.Image;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
@@ -19,15 +20,17 @@ public interface AdsMapper {
 
     @Mapping(source = "user.id", target = "author")
     @Mapping(source = "id", target = "pk")
-    @Mapping(source = "images", target = "image")
+    @Mapping(source = "image", target = "image")
     AdsDto adsToAdsDto(Ads ads);
 
     @Mapping(source = "author", target = "user.id")
     @Mapping(source = "pk", target = "id")
+    @Mapping(target = "image", ignore = true)
     Ads adsDtoToAds(AdsDto adsDto);
 
     List<AdsDto> ListAdsToListAdsDto(List<Ads> ads);
 
+    @Mapping(target = "image", ignore = true)
     Ads createAdsDtoToAds(CreateAdsDto createAdsDto);
 
     @Mapping(source = "id", target = "pk")
@@ -35,14 +38,15 @@ public interface AdsMapper {
     @Mapping(source = "user.lastName", target = "authorLastName")
     @Mapping(source = "user.email", target = "email")
     @Mapping(source = "user.phone", target = "phone")
-    @Mapping(source = "images", target = "image")
+    @Mapping(source = "image", target = "image")
     FullAdsDto adsToFullAdsDto(Ads ads);
 
     @Mapping(source = "size", target = "count")
     @Mapping(source = "userAdsList", target = "results")
     ResponseWrapperAds adsListToResponseWrapperAds(Integer size, List<Ads> userAdsList);
 
+    //    Тут неверно!!! Надо доработать!!!
     default String mapImageToString(Image image) {
-        return null;
+        return Arrays.toString(image.getData());
     }
 }

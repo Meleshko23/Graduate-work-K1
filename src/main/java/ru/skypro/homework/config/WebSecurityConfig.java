@@ -1,8 +1,7 @@
-package ru.skypro.homework;
+package ru.skypro.homework.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,10 +18,10 @@ public class WebSecurityConfig {
             "/swagger-ui.html",
             "/v3/api-docs",
             "/webjars/**",
-            "/ads", "/image",
-            "/login", "/register",
-            "/users/me/image/*",
-            "/ads/{id}/image"
+            "/login",
+            "/register",
+            "/ads",
+            "/ads/images/**"
     };
 
     @Bean
@@ -35,7 +34,7 @@ public class WebSecurityConfig {
         UserDetails admin = User.withDefaultPasswordEncoder()
                 .username("admin@gmail.com")
                 .password("password1")
-                .roles("USER, ADMIN")
+                .roles("ADMIN")
                 .build();
         return new InMemoryUserDetailsManager(user, admin);
     }
@@ -48,14 +47,16 @@ public class WebSecurityConfig {
                         authz
                                 .mvcMatchers(AUTH_WHITELIST).permitAll()
                                 .mvcMatchers("/ads/**", "/users/**").authenticated()
-                                .antMatchers(HttpMethod.GET, "/ads", "/ads/*/image", "/image/**", "/users/*/image").permitAll()
-
                 )
                 .cors().and()
                 .httpBasic(withDefaults());
         return http.build();
     }
 
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
 
 }
 

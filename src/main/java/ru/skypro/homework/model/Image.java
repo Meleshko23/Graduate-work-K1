@@ -1,13 +1,19 @@
 package ru.skypro.homework.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
+import lombok.*;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
 @Entity
 @Data
 @Table(name = "images")
+@NoArgsConstructor
+@EqualsAndHashCode
+@AllArgsConstructor
+@Getter
+@Setter
 public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,6 +21,8 @@ public class Image {
     private String filePath;
     private Long fileSize;
     private String mediaType;
+    @Lob
+    @Type(type = "binary")
     private byte[] data;
 
     @OneToOne
@@ -27,4 +35,8 @@ public class Image {
     @JoinColumn(name = "author")
     @JsonIgnore
     private User user;
+
+    public String toString() {
+        return "AdsEntity(id=" + this.getId() + ", image=" + java.util.Arrays.toString(this.getData()) + ")";
+    }
 }

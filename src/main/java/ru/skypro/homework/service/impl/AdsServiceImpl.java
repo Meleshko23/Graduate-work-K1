@@ -13,14 +13,15 @@ import ru.skypro.homework.exception.AdsNotFoundException;
 import ru.skypro.homework.mapper.AdsMapper;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.model.Ads;
+import ru.skypro.homework.model.Comment;
 import ru.skypro.homework.model.Image;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.UserRepository;
+import ru.skypro.homework.security.SecurityService;
 import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.ImageService;
-import ru.skypro.homework.service.SecurityService;
 import ru.skypro.homework.service.UserService;
 
 import java.util.List;
@@ -58,7 +59,7 @@ public class AdsServiceImpl implements AdsService {
         Ads savedAds = adsRepository.save(ads);
 
         Image adsImage = imageService.createImage(image, savedAds);
-        savedAds.setImages(adsImage);
+        savedAds.setImage(adsImage);
 
         return adsMapper.INSTANCE.adsToAdsDto(savedAds);
     }
@@ -76,32 +77,31 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public void removeAds(Integer id, Authentication authentication) {
-//        Ads ads = getAdsById(id);
-
-//        checkIfUserCanAlterAds(authentication, ads); // доработать метод проверки
-//        List<Comment> comments = ads.getComments();
-//        comments.stream()
-//                .forEach(comment -> commentRepository.deleteById(comment.getId()));
-        if (securityService.accessAds(authentication, id)) {
-            adsRepository.deleteById(id);
-        }
+        Ads ads = getAdsById(id);
+        securityService.checkIfUserCanAlterAds(authentication, ads); // доработать метод проверки
+        List<Comment> comments = ads.getComments();
+        comments.stream()
+                .forEach(comment -> commentRepository.deleteById(comment.getId()));
+        adsRepository.deleteById(id);
     }
 
     @Override
     public AdsDto updateAdsById(Integer id, CreateAdsDto createAdsDto, Authentication authentication) {
         Ads oldAds = getAdsById(id);
-
-//        checkIfUserCanAlterAds(authentication, oldAds); // доработать метод проверки
-        if (securityService.accessAds(authentication, id)) {
-            Ads infoToUpdate = adsMapper.INSTANCE.createAdsDtoToAds(createAdsDto);
-            oldAds.setPrice(infoToUpdate.getPrice());
-            oldAds.setTitle(infoToUpdate.getTitle());
-            oldAds.setDescription(infoToUpdate.getDescription());
-        }
+        securityService.checkIfUserCanAlterAds(authentication, oldAds);
+//        if (securityService.accessAds(authentication, id)) {
+//            Ads infoToUpdate = adsMapper.INSTANCE.createAdsDtoToAds(createAdsDto);
+//            oldAds.setPrice(infoToUpdate.getPrice());
+//            oldAds.setTitle(infoToUpdate.getTitle());
+//            oldAds.setDescription(infoToUpdate.getDescription());
+//        }
+        Ads infoToUpdate = adsMapper.INSTANCE.createAdsDtoToAds(createAdsDto);
+        oldAds.setPrice(infoToUpdate.getPrice());
+        oldAds.setTitle(infoToUpdate.getTitle());
+        oldAds.setDescription(infoToUpdate.getDescription());
         Ads updatedAds = adsRepository.save(oldAds);
         return adsMapper.INSTANCE.adsToAdsDto(updatedAds);
     }
-
 
     @Override
     public ResponseWrapperAds getAllAdsForUser(String username) {
@@ -112,7 +112,6 @@ public class AdsServiceImpl implements AdsService {
         responseWrapperAds.setCount(userAdsDtoList.size());
         responseWrapperAds.setResults(userAdsDtoList);
         return responseWrapperAds;
-
     }
 
     @Override
@@ -125,11 +124,10 @@ public class AdsServiceImpl implements AdsService {
     }
 
 //    private void checkIfUserCanAlterAds(Authentication authentication, Ads ads) {
-//        if (ads.getUser().getEmail() != authentication.getName()) {
+//        if (!Objects.equals(ads.getUser().getEmail(), authentication.getName())) {
 //            throw new RuntimeException("Вы не имеете права доступа");
 //        }
 //    }
-
 }
 
 

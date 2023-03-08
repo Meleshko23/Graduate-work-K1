@@ -8,8 +8,8 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.model.Ads;
 import ru.skypro.homework.model.Image;
 import ru.skypro.homework.repository.ImageRepository;
+import ru.skypro.homework.security.SecurityService;
 import ru.skypro.homework.service.ImageService;
-import ru.skypro.homework.service.SecurityService;
 import ru.skypro.homework.service.UserService;
 
 import java.io.IOException;
@@ -34,8 +34,8 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public byte[] updateAdsImage(Integer id, MultipartFile file, Authentication authentication) {
         Image oldImage = getImageFromDB(id);
-//        userService.checkIfUserHasPermissionToAlter(authentication, oldImage.getAds().getUser().getEmail());
-        securityService.accessImage(authentication, oldImage.getAds().getUser().getEmail());
+        securityService.checkIfUserHasPermissionToAlter(authentication, oldImage.getAds().getUser().getEmail());
+//        securityService.accessImage(authentication, oldImage.getAds().getUser().getEmail());
         extractInfoFromFile(file, oldImage);
         Image savedImage = imageRepository.save(oldImage);
         return savedImage.getData();

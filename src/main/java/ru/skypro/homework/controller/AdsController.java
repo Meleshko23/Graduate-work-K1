@@ -269,7 +269,6 @@ public class AdsController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(result);
-
     }
 
     @Operation(
@@ -282,9 +281,7 @@ public class AdsController {
                             schema = @Schema(implementation = ResponseWrapperAds.class))),
 
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
-
             @ApiResponse(responseCode = "403", description = "Forbidden"),
-
             @ApiResponse(responseCode = "404", description = "Not Found")})
 
     @PreAuthorize("isAuthenticated()")
