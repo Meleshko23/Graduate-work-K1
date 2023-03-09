@@ -99,10 +99,17 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
 
+//    "Это картинка объявления? Или аватар??
     @PreAuthorize("isAuthenticated()")
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public UserDto updateUserImage(@RequestPart MultipartFile image, Authentication authentication) {
         return new UserDto();
     }
 
+//    @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//    public ResponseEntity<MultipartFile> updateUserImage(@RequestParam MultipartFile image,
+//                                                         Authentication authentication) {
+//        userService.updateUserImage(image, authentication);
+//        return ResponseEntity.ok().build();
+//    }
 }

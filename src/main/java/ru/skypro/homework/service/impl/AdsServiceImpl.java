@@ -78,7 +78,8 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public void removeAds(Integer id, Authentication authentication) {
         Ads ads = getAdsById(id);
-        securityService.checkIfUserCanAlterAds(authentication, ads); // доработать метод проверки
+//        securityService.checkIfUserCanAlterAds(authentication, ads); // доработать метод проверки
+        securityService.checkIfUserHasPermissionToAlter(authentication, ads.getUser().getEmail());
         List<Comment> comments = ads.getComments();
         comments.stream()
                 .forEach(comment -> commentRepository.deleteById(comment.getId()));
@@ -88,7 +89,8 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public AdsDto updateAdsById(Integer id, CreateAdsDto createAdsDto, Authentication authentication) {
         Ads oldAds = getAdsById(id);
-        securityService.checkIfUserCanAlterAds(authentication, oldAds);
+        securityService.checkIfUserHasPermissionToAlter(authentication, oldAds.getUser().getEmail());
+//        securityService.checkIfUserCanAlterAds(authentication, oldAds);
 //        if (securityService.accessAds(authentication, id)) {
 //            Ads infoToUpdate = adsMapper.INSTANCE.createAdsDtoToAds(createAdsDto);
 //            oldAds.setPrice(infoToUpdate.getPrice());

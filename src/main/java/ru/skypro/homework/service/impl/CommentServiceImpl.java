@@ -67,7 +67,8 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void deleteComment(Integer adPk, Integer id, Authentication authentication) {
         Comment comment = commentRepository.findAdsComment(adPk, id).orElseThrow(CommentNotFoundException::new);
-        securityService.checkIfUserCanAlterComment(authentication, comment); // доработать метод проверки
+//        securityService.checkIfUserCanAlterComment(authentication, comment); // доработать метод проверки
+        securityService.checkIfUserHasPermissionToAlter(authentication, comment.getUser().getEmail());
         commentRepository.delete(comment);
     }
 
@@ -75,7 +76,8 @@ public class CommentServiceImpl implements CommentService {
     public CommentDto updateComment(Integer adPk, Integer id, CommentDto commentDto, Authentication authentication) {
         Comment comment = commentRepository.findAdsComment(adPk, id)
                 .orElseThrow(CommentNotFoundException::new);
-        securityService.checkIfUserCanAlterComment(authentication, comment); // доработать метод проверки
+//        securityService.checkIfUserCanAlterComment(authentication, comment); // доработать метод проверки
+        securityService.checkIfUserHasPermissionToAlter(authentication, comment.getUser().getEmail());
         comment.setText(commentDto.getText());
         comment.setCreateAt(LocalDate.parse(commentDto.getCreateAt()));
         commentRepository.save(comment);

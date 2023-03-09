@@ -10,7 +10,6 @@ import ru.skypro.homework.dto.ResponseWrapperAds;
 import ru.skypro.homework.model.Ads;
 import ru.skypro.homework.model.Image;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
@@ -49,4 +48,8 @@ public interface AdsMapper {
     default String mapImageToString(Image image) {
         return "/ads/image/" + image.getAds().getId();
     }
+
+//    default String mapAvatarToString(Image image) {
+//        return "/me/image/" + image.getUser().getId();
+//    }
 }

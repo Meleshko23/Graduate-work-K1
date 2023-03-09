@@ -5,10 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Role;
-import ru.skypro.homework.model.Ads;
-import ru.skypro.homework.model.Comment;
-
-import java.util.Objects;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -58,18 +54,18 @@ public class SecurityServiceImpl implements SecurityService {
         }
     }
 
-    @Override
-    public void checkIfUserCanAlterComment(Authentication authentication, Comment comment) {
-        if (!Objects.equals(comment.getUser().getEmail(), authentication.getName())) {
-            throw new RuntimeException("Вы не имеете права доступа");
-        }
-    }
+//    @Override
+//    public void checkIfUserCanAlterComment(Authentication authentication, Comment comment) {
+//        if (!Objects.equals(comment.getUser().getEmail(), authentication.getName())) {
+//            throw new RuntimeException("Вы не имеете права доступа");
+//        }
+//    }
 
-    @Override
-    public void checkIfUserCanAlterAds(Authentication authentication, Ads ads) {
-        if (!Objects.equals(ads.getUser().getEmail(), authentication.getName())) {
-            throw new RuntimeException("Вы не имеете права доступа");
-        }
-    }
+//    @Override
+//    public void checkIfUserCanAlterAds(Authentication authentication, Ads ads) {
+//        if (!Objects.equals(ads.getUser().getEmail(), authentication.getName())) {
+//            throw new RuntimeException("Вы не имеете права доступа");
+//        }
+//    }
 
 }
