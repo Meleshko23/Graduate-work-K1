@@ -64,4 +64,8 @@ public class ImageServiceImpl implements ImageService {
         imageToSave.setFileSize(file.getSize());
         imageToSave.setMediaType(file.getContentType());
     }
+
+    public Image getImageByAds(Integer id){
+        return imageRepository.findImageByAdsId(id);
+    }
 }

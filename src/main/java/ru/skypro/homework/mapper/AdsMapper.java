@@ -47,6 +47,6 @@ public interface AdsMapper {
 
     //    Тут неверно!!! Надо доработать!!!
     default String mapImageToString(Image image) {
-        return Arrays.toString(image.getData());
+        return "/ads/image/" + image.getAds().getId();
     }
 }

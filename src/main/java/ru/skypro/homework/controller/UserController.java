@@ -101,7 +101,7 @@ public class UserController {
 
     @PreAuthorize("isAuthenticated()")
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public UserDto updateUserImage(@RequestPart MultipartFile image) {
+    public UserDto updateUserImage(@RequestPart MultipartFile image, Authentication authentication) {
         return new UserDto();
     }
 

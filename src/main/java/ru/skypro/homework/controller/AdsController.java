@@ -18,6 +18,7 @@ import ru.skypro.homework.dto.*;
 import ru.skypro.homework.exception.AdsNotFoundException;
 import ru.skypro.homework.exception.CommentNotFoundException;
 import ru.skypro.homework.exception.CommentsNotFoundException;
+import ru.skypro.homework.model.Image;
 import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.CommentService;
 import ru.skypro.homework.service.ImageService;
@@ -307,4 +308,9 @@ public class AdsController {
         return ResponseEntity.ok(imageBytes);
     }
 
+    @GetMapping(value = "/image/{id}", produces = {MediaType.IMAGE_PNG_VALUE})
+    public ResponseEntity<byte[]> getImageAds(@PathVariable Integer id){
+        Image imageAds = imageService.getImageByAds(id);
+        return ResponseEntity.ok(imageAds.getData());
+    }
 }
