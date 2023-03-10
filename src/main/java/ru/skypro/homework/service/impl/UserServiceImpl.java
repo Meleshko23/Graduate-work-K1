@@ -30,8 +30,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUser(String username) {
+        log.info("Was invoked getUser method UserService");
         return userRepository.findUserByEmail(username).orElseThrow(RuntimeException::new); // обработать исключение!
-
     }
 
     @Override
@@ -39,16 +39,5 @@ public class UserServiceImpl implements UserService {
         User response = getUser(username);
         return userMapper.INSTANCE.userToUserDto(response);
     }
-
-//    @Override
-//    public void checkIfUserHasPermissionToAlter(Authentication authentication, String username) {
-//        boolean matchUser = authentication.getName().equals(username);
-//        boolean userIsAdmin = authentication.getAuthorities().stream()
-//                .anyMatch(auth -> auth.getAuthority().contains(Role.ADMIN.name()));
-//
-//        if (!(userIsAdmin || matchUser)) {
-//            throw new RuntimeException(); // обработать исключение!
-//        }
-//    }
 
 }

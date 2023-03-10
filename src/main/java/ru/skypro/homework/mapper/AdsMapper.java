@@ -44,12 +44,8 @@ public interface AdsMapper {
     @Mapping(source = "userAdsList", target = "results")
     ResponseWrapperAds adsListToResponseWrapperAds(Integer size, List<Ads> userAdsList);
 
-    //    Тут неверно!!! Надо доработать!!!
     default String mapImageToString(Image image) {
         return "/ads/image/" + image.getAds().getId();
     }
 
-//    default String mapAvatarToString(Image image) {
-//        return "/me/image/" + image.getUser().getId();
-//    }
 }

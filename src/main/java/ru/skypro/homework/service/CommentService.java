@@ -3,9 +3,6 @@ package ru.skypro.homework.service;
 import org.springframework.security.core.Authentication;
 import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.ResponseWrapperComment;
-import ru.skypro.homework.model.Comment;
-
-import java.util.List;
 
 public interface CommentService {
 
@@ -19,10 +16,5 @@ public interface CommentService {
 
     CommentDto updateComment(Integer adPk, Integer id, CommentDto commentDto, Authentication authentication);
 
-//    Comment getCommentById(Integer id);
-
-    List<Comment> findCommentsByAdsId(Integer adsId);
-
-//    void deleteCommentById(Integer id);
 }
 

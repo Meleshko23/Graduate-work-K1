@@ -17,5 +17,4 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
     @Query(value = "select comments.* from Comments, ads where ads.id = ?1 and Comments.id = ?2", nativeQuery = true)
     Optional<Comment> findAdsComment(Integer adPk, Integer id);
 
-//    Optional<Comment> findCommentByIdAndAuthorId(Integer commentId, Integer authorId);
 }

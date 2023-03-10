@@ -11,7 +11,6 @@ import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.security.SecurityService;
 import ru.skypro.homework.service.ImageService;
-import ru.skypro.homework.service.UserService;
 
 import java.io.IOException;
 
@@ -21,7 +20,6 @@ import java.io.IOException;
 public class ImageServiceImpl implements ImageService {
 
     private final ImageRepository imageRepository;
-    private final UserService userService;
     private final SecurityService securityService;
 
     @Override
@@ -46,7 +44,6 @@ public class ImageServiceImpl implements ImageService {
     public byte[] updateAdsImage(Integer id, MultipartFile file, Authentication authentication) {
         Image oldImage = getImageFromDB(id);
         securityService.checkIfUserHasPermissionToAlter(authentication, oldImage.getAds().getUser().getEmail());
-//        securityService.accessImage(authentication, oldImage.getAds().getUser().getEmail());
         extractInfoFromFile(file, oldImage);
         Image savedImage = imageRepository.save(oldImage);
         return savedImage.getData();
@@ -59,15 +56,9 @@ public class ImageServiceImpl implements ImageService {
             oldImage = new Image();
         }
         securityService.checkIfUserHasPermissionToAlter(authentication, oldImage.getUser().getEmail());
-//        securityService.accessImage(authentication, oldImage.getAds().getUser().getEmail());
         extractInfoFromFile(file, oldImage);
         Image savedImage = imageRepository.save(oldImage);
         return savedImage.getData();
-    }
-
-    @Override
-    public byte[] getAdsImage(Integer id) {
-        return getImageFromDB(id).getData();
     }
 
     private Image getImageFromDB(Integer id) {

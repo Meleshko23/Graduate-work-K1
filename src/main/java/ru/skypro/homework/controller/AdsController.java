@@ -298,20 +298,43 @@ public class AdsController {
         return ResponseEntity.ok(adsService.findAds(search));
     }
 
-    //    Обновление фото объявления
+    @Operation(
+            summary = "Обновить изображение",
+            description = "Позволяет редактировать изображение"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = @Content(mediaType = "application/octet-stream",
+                            schema = @Schema(implementation = Image.class))),
+
+            @ApiResponse(responseCode = "404", description = "Not Found")
+    })
+
     @PreAuthorize("isAuthenticated()")
     @PatchMapping(value = "{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<byte[]> updateAdsImage(@PathVariable Integer id,
                                                  @RequestParam MultipartFile image,
                                                  Authentication authentication) {
-        log.info("Was invoked updateAdsImage method from {}", ImageController.class.getSimpleName());
+        log.info("Was invoked updateAdsImage method from {}", AdsController.class.getSimpleName());
         Ads ads = adsService.getAdsById(id);
         byte[] imageBytes = imageService.updateAdsImage(ads.getImage().getId(), image, authentication);
         return ResponseEntity.ok(imageBytes);
     }
 
+    @Operation(
+            summary = "Получить все изображение объявлений",
+            description = "Позволяет получить все изображение объявлений"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = @Content(mediaType = "application/octet-stream",
+                            schema = @Schema(implementation = Image.class))),
+
+            @ApiResponse(responseCode = "404", description = "Not Found")
+    })
     @GetMapping(value = "/image/{id}", produces = {MediaType.IMAGE_PNG_VALUE})
-    public ResponseEntity<byte[]> getImageAds(@PathVariable Integer id){
+    public ResponseEntity<byte[]> getImageAds(@PathVariable Integer id) {
+        log.info("Was invoked getImageAds method from {}", AdsController.class.getSimpleName());
         Image imageAds = imageService.getImageByAds(id);
         return ResponseEntity.ok(imageAds.getData());
     }

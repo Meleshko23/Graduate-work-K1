@@ -11,6 +11,4 @@ public interface UserService {
 
     UserDto getUserDtoByUsername(String username);
 
-//    void checkIfUserHasPermissionToAlter(Authentication authentication, String username);
-
 }

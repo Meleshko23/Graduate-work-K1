@@ -10,7 +10,6 @@ import javax.persistence.*;
 @Data
 @Table(name = "images")
 @NoArgsConstructor
-@EqualsAndHashCode
 @AllArgsConstructor
 @Getter
 @Setter

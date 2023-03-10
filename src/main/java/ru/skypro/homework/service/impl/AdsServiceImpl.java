@@ -11,14 +11,12 @@ import ru.skypro.homework.dto.FullAdsDto;
 import ru.skypro.homework.dto.ResponseWrapperAds;
 import ru.skypro.homework.exception.AdsNotFoundException;
 import ru.skypro.homework.mapper.AdsMapper;
-import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.model.Ads;
 import ru.skypro.homework.model.Comment;
 import ru.skypro.homework.model.Image;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.CommentRepository;
-import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.security.SecurityService;
 import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.ImageService;
@@ -33,12 +31,9 @@ public class AdsServiceImpl implements AdsService {
 
     private final AdsRepository adsRepository;
     private final AdsMapper adsMapper;
-    private final UserMapper userMapper;
     private final ImageService imageService;
     private final UserService userService;
-    //    private final CommentService commentService;
     private final CommentRepository commentRepository;
-    private final UserRepository userRepository;
     private final SecurityService securityService;
 
     @Override
@@ -66,7 +61,7 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public Ads getAdsById(Integer id) {
-        return adsRepository.findById(id).orElseThrow(AdsNotFoundException::new); // обработать исключение!
+        return adsRepository.findById(id).orElseThrow(AdsNotFoundException::new);
     }
 
     @Override
@@ -78,7 +73,6 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public void removeAds(Integer id, Authentication authentication) {
         Ads ads = getAdsById(id);
-//        securityService.checkIfUserCanAlterAds(authentication, ads); // доработать метод проверки
         securityService.checkIfUserHasPermissionToAlter(authentication, ads.getUser().getEmail());
         List<Comment> comments = ads.getComments();
         comments.stream()
@@ -90,13 +84,6 @@ public class AdsServiceImpl implements AdsService {
     public AdsDto updateAdsById(Integer id, CreateAdsDto createAdsDto, Authentication authentication) {
         Ads oldAds = getAdsById(id);
         securityService.checkIfUserHasPermissionToAlter(authentication, oldAds.getUser().getEmail());
-//        securityService.checkIfUserCanAlterAds(authentication, oldAds);
-//        if (securityService.accessAds(authentication, id)) {
-//            Ads infoToUpdate = adsMapper.INSTANCE.createAdsDtoToAds(createAdsDto);
-//            oldAds.setPrice(infoToUpdate.getPrice());
-//            oldAds.setTitle(infoToUpdate.getTitle());
-//            oldAds.setDescription(infoToUpdate.getDescription());
-//        }
         Ads infoToUpdate = adsMapper.INSTANCE.createAdsDtoToAds(createAdsDto);
         oldAds.setPrice(infoToUpdate.getPrice());
         oldAds.setTitle(infoToUpdate.getTitle());
@@ -107,7 +94,6 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public ResponseWrapperAds getAllAdsForUser(String username) {
-//        User user = userRepository.findUserByEmail(username).get();
         List<Ads> userAdsList = adsRepository.findAdsByUserEmail(username);
         List<AdsDto> userAdsDtoList = adsMapper.ListAdsToListAdsDto(userAdsList);
         ResponseWrapperAds responseWrapperAds = new ResponseWrapperAds();
@@ -119,17 +105,9 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public ResponseWrapperAds findAds(String search) {
         List<Ads> adsDtoDtoList = adsRepository.findAds(search);
-//        ResponseWrapperAds responseWrapperAds = new ResponseWrapperAds();
-//        responseWrapperAds.setCount(adsDtoDtoList.size());
-//        responseWrapperAds.setResults(adsDtoDtoList);
         return adsMapper.INSTANCE.adsListToResponseWrapperAds(adsDtoDtoList.size(), adsDtoDtoList);
     }
 
-//    private void checkIfUserCanAlterAds(Authentication authentication, Ads ads) {
-//        if (!Objects.equals(ads.getUser().getEmail(), authentication.getName())) {
-//            throw new RuntimeException("Вы не имеете права доступа");
-//        }
-//    }
 }
 
 

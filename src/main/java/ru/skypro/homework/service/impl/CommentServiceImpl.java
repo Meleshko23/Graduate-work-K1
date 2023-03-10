@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.ResponseWrapperComment;
 import ru.skypro.homework.exception.CommentNotFoundException;
-import ru.skypro.homework.mapper.CommentMapper;
-import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.model.Ads;
 import ru.skypro.homework.model.Comment;
 import ru.skypro.homework.model.User;
@@ -30,16 +28,13 @@ import static ru.skypro.homework.mapper.CommentMapper.INSTANCE;
 public class CommentServiceImpl implements CommentService {
 
     private final AdsService adsService;
-    private final CommentMapper commentMapper;
-    private final UserMapper userMapper;
     private final CommentRepository commentRepository;
     private final UserService userService;
     private final SecurityService securityService;
 
     @Override
     public ResponseWrapperComment getAllCommentsForAdsWithId(Integer adsId) {
-        Ads adsById = adsService.getAdsById(adsId); // возможно исключение AdsNotFoundException
-
+        Ads adsById = adsService.getAdsById(adsId);
         List<Comment> comments = adsById.getComments();
         return INSTANCE.commentsListToResponseWrapperComment(comments.size(), comments);
     }
@@ -47,7 +42,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentDto createNewComment(Integer adsId, CommentDto commentDto, Authentication authentication) {
         log.info("Was invoked createNewComment method from {}", CommentService.class.getSimpleName());
-        Ads ads = adsService.getAdsById(adsId); // возможно исключение AdsNotFoundException
+        Ads ads = adsService.getAdsById(adsId);
         User currentUser = userService.getUser(authentication.getName());
 
         Comment comment = INSTANCE.commentDtoToComment(commentDto);
@@ -67,7 +62,6 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void deleteComment(Integer adPk, Integer id, Authentication authentication) {
         Comment comment = commentRepository.findAdsComment(adPk, id).orElseThrow(CommentNotFoundException::new);
-//        securityService.checkIfUserCanAlterComment(authentication, comment); // доработать метод проверки
         securityService.checkIfUserHasPermissionToAlter(authentication, comment.getUser().getEmail());
         commentRepository.delete(comment);
     }
@@ -76,7 +70,6 @@ public class CommentServiceImpl implements CommentService {
     public CommentDto updateComment(Integer adPk, Integer id, CommentDto commentDto, Authentication authentication) {
         Comment comment = commentRepository.findAdsComment(adPk, id)
                 .orElseThrow(CommentNotFoundException::new);
-//        securityService.checkIfUserCanAlterComment(authentication, comment); // доработать метод проверки
         securityService.checkIfUserHasPermissionToAlter(authentication, comment.getUser().getEmail());
         comment.setText(commentDto.getText());
         comment.setCreateAt(LocalDate.parse(commentDto.getCreateAt()));
@@ -84,14 +77,4 @@ public class CommentServiceImpl implements CommentService {
         return INSTANCE.commentToCommentDto(comment);
     }
 
-    @Override
-    public List<Comment> findCommentsByAdsId(Integer adsId) {
-        return commentRepository.findCommentsByAdsId(adsId);
-    }
-
-//    private void checkIfUserCanAlterComment(Authentication authentication, Comment comment) {
-//        if (!Objects.equals(comment.getUser().getEmail(), authentication.getName())) {
-//            throw new RuntimeException("Вы не имеете права доступа");
-//        }
-//    }
 }

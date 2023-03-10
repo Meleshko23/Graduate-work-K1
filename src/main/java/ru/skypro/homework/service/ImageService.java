@@ -11,8 +11,6 @@ public interface ImageService {
 
     byte[] updateAdsImage(Integer id, MultipartFile file, Authentication authentication);
 
-    byte[] getAdsImage(Integer id);
-
     Image getImageByAds(Integer id);
 
     byte[] updateImageUser(Integer id, MultipartFile file, Authentication authentication);
