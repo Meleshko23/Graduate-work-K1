@@ -27,6 +27,9 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
+    @OneToOne(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Image image;
+
     @OneToMany(mappedBy = "user")
     private Collection<Ads> adsCollection;
 

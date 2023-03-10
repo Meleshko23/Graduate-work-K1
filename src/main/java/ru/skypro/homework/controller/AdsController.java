@@ -18,6 +18,7 @@ import ru.skypro.homework.dto.*;
 import ru.skypro.homework.exception.AdsNotFoundException;
 import ru.skypro.homework.exception.CommentNotFoundException;
 import ru.skypro.homework.exception.CommentsNotFoundException;
+import ru.skypro.homework.model.Ads;
 import ru.skypro.homework.model.Image;
 import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.CommentService;
@@ -304,7 +305,8 @@ public class AdsController {
                                                  @RequestParam MultipartFile image,
                                                  Authentication authentication) {
         log.info("Was invoked updateAdsImage method from {}", ImageController.class.getSimpleName());
-        byte[] imageBytes = imageService.updateAdsImage(id, image, authentication);
+        Ads ads = adsService.getAdsById(id);
+        byte[] imageBytes = imageService.updateAdsImage(ads.getImage().getId(), image, authentication);
         return ResponseEntity.ok(imageBytes);
     }
 

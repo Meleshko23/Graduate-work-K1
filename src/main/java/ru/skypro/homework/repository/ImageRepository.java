@@ -8,4 +8,6 @@ import ru.skypro.homework.model.Image;
 public interface ImageRepository extends JpaRepository<Image, Integer> {
 
     Image findImageByAdsId(Integer id);
+
+    Image findImageByUserId(Integer id);
 }

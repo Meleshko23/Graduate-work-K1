@@ -15,6 +15,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.mapper.UserMapper;
+import ru.skypro.homework.model.Image;
+import ru.skypro.homework.model.User;
+import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
 
 @Slf4j
@@ -25,6 +29,8 @@ import ru.skypro.homework.service.UserService;
 public class UserController {
 
     private final UserService userService;
+    private final UserMapper userMapper;
+    private final ImageService imageService;
 
     @Operation(
             summary = "Установить пароль",
@@ -102,8 +108,21 @@ public class UserController {
 //    "Это картинка объявления? Или аватар??
     @PreAuthorize("isAuthenticated()")
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public UserDto updateUserImage(@RequestPart MultipartFile image, Authentication authentication) {
-        return new UserDto();
+    public ResponseEntity<byte[]> updateUserImage(@RequestParam MultipartFile image, Authentication authentication) {
+        User user = userService.getUser(authentication.getName());
+        byte[] imageUser;
+        if(user.getImage() == null){
+            imageUser = imageService.createImageUser(image, user, authentication);
+        } else {
+        imageUser = imageService.updateImageUser(user.getImage().getId(), image, authentication);
+        }
+        return ResponseEntity.ok(imageUser);
+    }
+
+    @GetMapping(value = "/image/{id}", produces = {MediaType.IMAGE_PNG_VALUE})
+    public ResponseEntity<byte[]> getImageUser (@PathVariable Integer id){
+        Image imageUser = imageService.getImageByUsers(id);
+        return ResponseEntity.ok(imageUser.getData());
     }
 
 //    @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

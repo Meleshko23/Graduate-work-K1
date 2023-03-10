@@ -14,5 +14,5 @@ public class UserDto {
     private String phone;
     private LocalDate regDate;
     private String city;
-    private List<String> image;
+    private String image;
 }
