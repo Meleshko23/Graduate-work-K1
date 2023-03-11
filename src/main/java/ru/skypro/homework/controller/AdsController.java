@@ -35,58 +35,50 @@ public class AdsController {
     private final CommentService commentService;
     private final ImageService imageService;
 
-    @Operation(
-            summary = "Получить все объявления",
-            description = ""
-    )
+    @Operation(summary = "Получить все объявления",
+            description = "")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = "*/*",
-                            schema = @Schema(implementation = ResponseWrapperAds.class)))
-    })
+                            schema = @Schema(implementation = ResponseWrapperAds.class)))})
 
     @GetMapping
     public ResponseEntity<ResponseWrapperAds> getAllAds() {
+        log.info("Was invoked getAllAds method from {}", AdsController.class.getSimpleName());
         return ResponseEntity.ok(adsService.getAllAds());
     }
 
-    @Operation(
-            summary = "Создать новое объявление",
-            description = ""
-    )
+    @Operation(summary = "Создать новое объявление",
+            description = "")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Created",
                     content = @Content(mediaType = "*/*",
                             schema = @Schema(implementation = AdsDto.class))),
-
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
-            @ApiResponse(responseCode = "404", description = "Not Found")
-    })
+            @ApiResponse(responseCode = "404", description = "Not Found")})
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AdsDto> addAds(@RequestPart("properties") CreateAdsDto createAdsDto,
                                          @RequestPart("image") MultipartFile image,
                                          Authentication authentication) {
+        log.info("Was invoked addAds method from {}", AdsController.class.getSimpleName());
         return ResponseEntity.status(HttpStatus.CREATED).body(adsService.createAds(createAdsDto, image, authentication));
     }
 
-    @Operation(
-            summary = "Посмотреть комментарии",
-            description = "Получает все комментарии, которые оставили под объявлением"
-    )
+    @Operation(summary = "Посмотреть комментарии",
+            description = "Получает все комментарии, которые оставили под объявлением")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = "*/*",
                             schema = @Schema(implementation = ResponseWrapperComment.class))),
-
-            @ApiResponse(responseCode = "404", description = "Not Found")
-    })
+            @ApiResponse(responseCode = "404", description = "Not Found")})
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{ad_pk}/comments")
     public ResponseEntity<ResponseWrapperComment> getComments(@PathVariable(name = "ad_pk", required = true) Integer adPk) {
+        log.info("Was invoked getComments method from {}", AdsController.class.getSimpleName());
         ResponseWrapperComment result = null;
         try {
             result = commentService.getAllCommentsForAdsWithId(adPk);
@@ -96,25 +88,22 @@ public class AdsController {
         return ResponseEntity.ok(result);
     }
 
-    @Operation(
-            summary = "Добавить комментарий к объявлению",
-            description = ""
-    )
+    @Operation(summary = "Добавить комментарий к объявлению",
+            description = "")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = "*/*",
                             schema = @Schema(implementation = CommentDto.class))),
-
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
-            @ApiResponse(responseCode = "404", description = "Not Found")
-    })
+            @ApiResponse(responseCode = "404", description = "Not Found")})
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/{ad_pk}/comments")
     public ResponseEntity<CommentDto> addComments(@PathVariable(name = "ad_pk", required = true) Integer adPk,
                                                   @RequestBody(required = true) CommentDto commentDto,
                                                   Authentication authentication) {
+        log.info("Was invoked addComments method from {}", AdsController.class.getSimpleName());
         CommentDto result = null;
         try {
             result = commentService.createNewComment(adPk, commentDto, authentication);
@@ -124,21 +113,18 @@ public class AdsController {
         return ResponseEntity.ok(result);
     }
 
-    @Operation(
-            summary = "Получить объявление",
-            description = "Получает объявление со всеми данными о пользователе"
-    )
+    @Operation(summary = "Получить объявления",
+            description = "Получает объявления пользователя")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = "*/*",
                             schema = @Schema(implementation = FullAdsDto.class))),
-
-            @ApiResponse(responseCode = "404", description = "Not Found")
-    })
+            @ApiResponse(responseCode = "404", description = "Not Found")})
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
     public ResponseEntity<FullAdsDto> getFullAd(@PathVariable(required = true) Integer id) {
+        log.info("Was invoked getFullAd method from {}", AdsController.class.getSimpleName());
         FullAdsDto result = null;
         try {
             result = adsService.getFullAdsById(id);
@@ -148,15 +134,12 @@ public class AdsController {
         return ResponseEntity.ok(result);
     }
 
-    @Operation(
-            summary = "Удалить объявление",
-            description = ""
-    )
+    @Operation(summary = "Удалить объявление",
+            description = "")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "No Content"),
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
-            @ApiResponse(responseCode = "403", description = "Forbidden")
-    })
+            @ApiResponse(responseCode = "403", description = "Forbidden")})
 
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{id}")
@@ -167,19 +150,15 @@ public class AdsController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(
-            summary = "Обновить объявление",
-            description = "Позволяет отредактировать объявление"
-    )
+    @Operation(summary = "Обновить объявление",
+            description = "Позволяет отредактировать объявление")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = "*/*",
                             schema = @Schema(implementation = AdsDto.class))),
-
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
-            @ApiResponse(responseCode = "404", description = "Not Found")
-    })
+            @ApiResponse(responseCode = "404", description = "Not Found")})
 
     @PreAuthorize("isAuthenticated()")
     @PatchMapping("/{id}")
@@ -194,22 +173,19 @@ public class AdsController {
         }
     }
 
-    @Operation(
-            summary = "Посмотреть комментарий",
-            description = "Позволяет просмотреть определенный комментарий к объявлению"
-    )
+    @Operation(summary = "Посмотреть комментарий",
+            description = "Позволяет просмотреть определенный комментарий к объявлению")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = "*/*",
                             schema = @Schema(implementation = CommentDto.class))),
-
-            @ApiResponse(responseCode = "404", description = "Not Found")
-    })
+            @ApiResponse(responseCode = "404", description = "Not Found")})
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{ad_pk}/comments/{id}")
     public ResponseEntity<CommentDto> getComments(@PathVariable(name = "ad_pk", required = true) Integer adPk,
                                                   @PathVariable(required = true) Integer id) {
+        log.info("Was invoked getComments method from {}", AdsController.class.getSimpleName());
         CommentDto result = null;
         try {
             result = commentService.getComment(adPk, id);
@@ -219,22 +195,20 @@ public class AdsController {
         return ResponseEntity.ok(result);
     }
 
-    @Operation(
-            summary = "Удалить комментарий",
-            description = "Удаляет комментарий по его id"
-    )
+    @Operation(summary = "Удалить комментарий",
+            description = "Удаляет комментарий по его id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
-            @ApiResponse(responseCode = "404", description = "Not Found")
-    })
+            @ApiResponse(responseCode = "404", description = "Not Found")})
 
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{ad_pk}/comments/{id}")
     public ResponseEntity<Void> deleteComments(@PathVariable(name = "ad_pk", required = true) Integer adPk,
                                                @PathVariable(required = true) Integer id,
                                                Authentication authentication) {
+        log.info("Was invoked deleteComments method from {}", AdsController.class.getSimpleName());
         try {
             commentService.deleteComment(adPk, id, authentication);
         } catch (CommentNotFoundException e) {
@@ -243,19 +217,15 @@ public class AdsController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(
-            summary = "Обновить комментарий",
-            description = "Позволяет редактировать комментарий"
-    )
+    @Operation(summary = "Обновить комментарий",
+            description = "Позволяет редактировать комментарий")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = "*/*",
                             schema = @Schema(implementation = CommentDto.class))),
-
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
-            @ApiResponse(responseCode = "404", description = "Not Found")
-    })
+            @ApiResponse(responseCode = "404", description = "Not Found")})
 
     @PreAuthorize("isAuthenticated()")
     @PatchMapping("/{ad_pk}/comments/{id}")
@@ -273,15 +243,12 @@ public class AdsController {
         return ResponseEntity.ok(result);
     }
 
-    @Operation(
-            summary = "Получить объявления пользователя",
-            description = "Позволяет получить все объявления, которые создал пользователь"
-    )
+    @Operation(summary = "Получить объявления пользователя",
+            description = "Позволяет получить все объявления, которые создал пользователь")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = "*/*",
                             schema = @Schema(implementation = ResponseWrapperAds.class))),
-
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not Found")})
@@ -289,26 +256,31 @@ public class AdsController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/me")
     public ResponseEntity<ResponseWrapperAds> getAdsMe(Authentication authentication) {
+        log.info("Was invoked getAdsMe method from {}", AdsController.class.getSimpleName());
         return ResponseEntity.ok(adsService.getAllAdsForUser(authentication.getName()));
     }
 
-    //    Поиск обьявлений
+    @Operation(summary = "Поиск объявления",
+            description = "Позволяет получить все объявления по названию")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = @Content(mediaType = "*/*",
+                            schema = @Schema(implementation = FullAdsDto.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found")})
+
     @GetMapping(params = {"search"})
     public ResponseEntity<ResponseWrapperAds> findAds(@RequestParam(required = false) String search) {
+        log.info("Was invoked findAds method from {}", AdsController.class.getSimpleName());
         return ResponseEntity.ok(adsService.findAds(search));
     }
 
-    @Operation(
-            summary = "Обновить изображение",
-            description = "Позволяет редактировать изображение"
-    )
+    @Operation(summary = "Обновить изображение",
+            description = "Позволяет редактировать изображение")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = "application/octet-stream",
                             schema = @Schema(implementation = Image.class))),
-
-            @ApiResponse(responseCode = "404", description = "Not Found")
-    })
+            @ApiResponse(responseCode = "404", description = "Not Found")})
 
     @PreAuthorize("isAuthenticated()")
     @PatchMapping(value = "{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -321,17 +293,14 @@ public class AdsController {
         return ResponseEntity.ok(imageBytes);
     }
 
-    @Operation(
-            summary = "Получить все изображение объявлений",
-            description = "Позволяет получить все изображение объявлений"
-    )
+    @Operation(summary = "Получить все изображение объявлений",
+            description = "Позволяет получить все изображение объявлений")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = "application/octet-stream",
                             schema = @Schema(implementation = Image.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found")})
 
-            @ApiResponse(responseCode = "404", description = "Not Found")
-    })
     @GetMapping(value = "/image/{id}", produces = {MediaType.IMAGE_PNG_VALUE})
     public ResponseEntity<byte[]> getImageAds(@PathVariable Integer id) {
         log.info("Was invoked getImageAds method from {}", AdsController.class.getSimpleName());

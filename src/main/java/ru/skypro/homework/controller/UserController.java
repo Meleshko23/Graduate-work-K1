@@ -30,15 +30,12 @@ public class UserController {
     private final UserService userService;
     private final ImageService imageService;
 
-    @Operation(
-            summary = "Установить пароль",
-            description = "Позволяет обновить пароль пользователя"
-    )
+    @Operation(summary = "Установить пароль",
+            description = "Позволяет обновить пароль пользователя")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = "*/*",
                             schema = @Schema(implementation = NewPassword.class))),
-
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not Found")
@@ -47,18 +44,16 @@ public class UserController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/set_password")
     public ResponseEntity<NewPassword> setPassword(@RequestBody NewPassword newPassword) {
+        log.info("Was invoked setPassword method UserController");
         return ResponseEntity.ok(newPassword);
     }
 
-    @Operation(
-            summary = "Получить данные",
-            description = "Выводит данные о пользователе"
-    )
+    @Operation(summary = "Получить данные",
+            description = "Выводит данные о пользователе")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = "*/*",
                             schema = @Schema(implementation = UserDto.class))),
-
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not Found")
@@ -67,19 +62,16 @@ public class UserController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/me")
     public ResponseEntity<UserDto> getUser(Authentication authentication) {
-        log.info("Was invoked get user method");
+        log.info("Was invoked getUser method UserController");
         return ResponseEntity.ok(userService.getUserDtoByUsername(authentication.getName()));
     }
 
-    @Operation(
-            summary = "Обновить данные",
-            description = "Позволяет обновить информацию о пользователе"
-    )
+    @Operation(summary = "Обновить данные",
+            description = "Позволяет обновить информацию о пользователе")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = "*/*",
                             schema = @Schema(implementation = UserDto.class))),
-
             @ApiResponse(responseCode = "204", description = "No Content"),
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
@@ -90,14 +82,12 @@ public class UserController {
     @PatchMapping("/me")
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto,
                                               Authentication authentication) {
-        log.info("Was invoked update user method");
+        log.info("Was invoked updateUser method UserController");
         return ResponseEntity.ok(userService.updateUser(userDto, authentication.getName()));
     }
 
-    @Operation(
-            summary = "Обновить изображение",
-            description = "Обновить изображение пользователя"
-    )
+    @Operation(summary = "Обновить изображение",
+            description = "Обновить изображение пользователя")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "404", description = "Not Found")
@@ -117,10 +107,8 @@ public class UserController {
         return ResponseEntity.ok(imageUser);
     }
 
-    @Operation(
-            summary = "Показать изображение",
-            description = "Получить изображение пользователя"
-    )
+    @Operation(summary = "Показать изображение",
+            description = "Получить изображение пользователя")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "404", description = "Not Found")
